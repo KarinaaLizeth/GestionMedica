@@ -1,4 +1,4 @@
-/* Importar la fuente Poppins */
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 
 body {
@@ -9,9 +9,12 @@ body {
 }
 
 .navbar {
-    background-color: #83c5be; /* Color de fondo de la navbar */
+    background-color: #DAFFEF;
 }
 
 .navbar:hover{
     color: black;
+}
+.navbar a:hover {
+    color: #247b7b;
 }
