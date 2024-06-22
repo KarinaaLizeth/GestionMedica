@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Doctores;
+use App\Models\DiaTrabajo;
+use App\Models\Horario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -14,87 +16,118 @@ use Illuminate\Http\RedirectResponse;
 
 class DoctoresController extends Controller
 {
-    //Mostrar vista register cuando se de clic en crear, se obtienen todos los registros de la tabla doctores para mostrarlos en la vista
-    public function index(): View
+    public function index()
     {
-        $doctores = Doctores::all();
-        return view('doctores.doctores', ['doctores' => $doctores]);
+        $doctores = Doctores::with(['diasTrabajo', 'horarios'])->get();
+        return view('doctores.doctores', compact('doctores'));
     }
 
-    // Método para mostrar el formulario para editarar a los doctores
-    public function editar(Doctores $doctor): View
+    public function crear()
     {
-        return view('doctores.editar', ['doctor' => $doctor]); //en la vista se pasan los datos del doctor que se va a editar
+        return view('doctores.crear');
     }
-    
 
-    // formulario de crear un doctor
-     public function crear(): View
-     {
-         return view('doctores.crear');
-     }
-
-     //Metodo para validar y crear el doctor
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $request->validate([
-            'nombres' => ['required', 'string', 'max:255'],
-            'apellidos' => ['required', 'string', 'max:255'],
-            'correo' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:doctores'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'telefono' => ['required', 'int'],
-            'especialidad' => ['required', 'string', 'max:255'],
-            'consultorio' => ['required', 'int'],
+            'nombres' => 'required|string|max:255',
+            'apellidos' => 'required|string|max:255',
+            'correo' => 'required|string|email|max:255|unique:doctores',
+            'password' => 'required|string|min:8|confirmed',
+            'telefono' => 'required|numeric',
+            'especialidad' => 'required|string|max:255',
+            'precio_consulta' => 'required|numeric',
+            'duracion_cita' => 'required|integer|min:10|max:60',
+            'dias_disponibles' => 'required|array',
+            'available_time_from' => 'required|array',
+            'available_time_to' => 'required|array',
         ]);
-
 
         $doctor = Doctores::create([
             'nombres' => $request->nombres,
             'apellidos' => $request->apellidos,
             'correo' => $request->correo,
             'password' => Hash::make($request->password),
-            'telefono' => $request->telefono, 
+            'telefono' => $request->telefono,
             'especialidad' => $request->especialidad,
-            'consultorio' => $request->consultorio,
+            'precio_consulta' => $request->precio_consulta,
+            'duracion_cita' => $request->duracion_cita,
         ]);
 
-        event(new Registered($doctor));
+        foreach ($request->dias_disponibles as $dia) {
+            DiaTrabajo::create([
+                'doctor_id' => $doctor->id,
+                'dia' => $dia,
+            ]);
+        }
 
-        return redirect()->route('doctores.index')->with('success', 'Nuevo doctor agregado.');
+        for ($i = 0; $i < count($request->available_time_from); $i++) {
+            Horario::create([
+                'doctor_id' => $doctor->id,
+                'hora_inicio' => $request->available_time_from[$i],
+                'hora_fin' => $request->available_time_to[$i],
+            ]);
+        }
+
+        return redirect()->route('doctores.index')->with('success', 'Doctor registrado exitosamente');
     }
 
-    // Método para actualizar los datos del doctor
-    public function actualizar(Request $request, Doctores $doctor): RedirectResponse
+    public function editar($id)
+    {
+        $doctor = Doctores::with(['diasTrabajo', 'horarios'])->findOrFail($id);
+        return view('doctores.editar', compact('doctor'));
+    }
+
+    public function actualizar(Request $request, $id)
     {
         $request->validate([
-            'nombres' => ['required', 'string', 'max:255'],
-            'apellidos' => ['required', 'string', 'max:255'],
-            'correo' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:doctores,correo,' . $doctor->id],
-            'telefono' => ['required', 'int'],
-            'especialidad' => ['required', 'string', 'max:255'],
-            'consultorio' => ['required', 'int'],
+            'nombres' => 'required|string|max:255',
+            'apellidos' => 'required|string|max:255',
+            'correo' => 'required|string|email|max:255|unique:doctores,correo,'.$id,
+            'telefono' => 'required|numeric',
+            'especialidad' => 'required|string|max:255',
+            'precio_consulta' => 'required|numeric',
+            'duracion_cita' => 'required|integer|min:10|max:60',
+            'dias_disponibles' => 'required|array',
+            'available_time_from' => 'required|array',
+            'available_time_to' => 'required|array',
         ]);
 
-
-        //actualiza unicamente los datos validados
+        $doctor = Doctores::findOrFail($id);
         $doctor->update([
             'nombres' => $request->nombres,
             'apellidos' => $request->apellidos,
             'correo' => $request->correo,
             'telefono' => $request->telefono,
             'especialidad' => $request->especialidad,
-            'consultorio' => $request->consultorio,
+            'precio_consulta' => $request->precio_consulta,
+            'duracion_cita' => $request->duracion_cita,
         ]);
 
-        return redirect()->route('doctores.index')->with('success', 'Datos del doctor actualizados.');
+        DiaTrabajo::where('doctor_id', $doctor->id)->delete();
+        foreach ($request->dias_disponibles as $dia) {
+            DiaTrabajo::create([
+                'doctor_id' => $doctor->id,
+                'dia' => $dia,
+            ]);
+        }
+
+        Horario::where('doctor_id', $doctor->id)->delete();
+        for ($i = 0; $i < count($request->available_time_from); $i++) {
+            Horario::create([
+                'doctor_id' => $doctor->id,
+                'hora_inicio' => $request->available_time_from[$i],
+                'hora_fin' => $request->available_time_to[$i],
+            ]);
+        }
+
+        return redirect()->route('doctores.index')->with('success', 'Doctor actualizado exitosamente');
     }
 
-    //metodo eliminar un doctor, lo busca por su id 
-    public function eliminar($id): RedirectResponse
+    public function eliminar($id)
     {
         $doctor = Doctores::findOrFail($id);
         $doctor->delete();
-        return redirect()->route('doctores.index')->with('success', 'Doctor eliminado.');
+        return redirect()->route('doctores.index')->with('success', 'Doctor eliminado exitosamente');
     }
-
 }

@@ -1,69 +1,63 @@
 @extends('layouts.app')
+<link rel="stylesheet" href="{{ asset('css/crear.css') }}">
 
 @section('content')
-<div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
-  <div class="container max-w-screen-lg mx-auto">
-    <div>
-      <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
-        <form action="{{ route('citas.store') }}" method="POST">
-          @csrf
-          <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
-            <div class="text-gray-600">
-              <p class="font-medium text-lg">Agendar Cita</p>
-              <p>Ingrese todos los campos</p>
-            </div>
+<br>
+<div class="formulario-agregar-container">
+    <div class="informacion-header">
+        <h3>Información</h3>
+        <a href="{{ route('citas.index') }}"><ion-icon name="arrow-back-outline" class="mr-2"></ion-icon>Lista de Citas</a>
+    </div>
+    <div class="formulario-agregar">
+        <h3>Agendar Cita</h3>
+        <form method="POST" action="{{ route('citas.store') }}">
+            @csrf
 
-            <div class="lg:col-span-2">
-              <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
-                <div class="md:col-span-5">
-                  <label for="paciente_id">Paciente</label>
-                  <select name="paciente_id" id="paciente_id" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
+            <!-- Paciente -->
+            <div> 
+                <label for="paciente_id">Paciente</label>
+                <select name="paciente_id" id="paciente_id" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
                     @foreach($pacientes as $paciente)
                       <option value="{{ $paciente->id }}">{{ $paciente->nombres }} {{ $paciente->apellidos }}</option>
                     @endforeach
-                  </select>
-                </div>
+                </select>
+            </div>
 
-                <div class="md:col-span-5">
-                  <label for="doctor_id">Doctor</label>
-                  <select name="doctor_id" id="doctor_id" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
+            <!-- Doctor -->
+            <div>
+                <label for="doctor_id">Doctor</label>
+                <select name="doctor_id" id="doctor_id" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
                     @foreach($doctores as $doctor)
                       <option value="{{ $doctor->id }}">{{ $doctor->nombres }} {{ $doctor->apellidos }}</option>
                     @endforeach
-                  </select>
-                </div>
-
-                <div class="md:col-span-3">
-                  <label for="fecha">Fecha</label>
-                  <input type="date" name="fecha" id="fecha" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" required />
-                </div>
-
-                <div class="md:col-span-2">
-                  <label for="hora">Hora</label>
-                  <input type="time" name="hora" id="hora" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" required />
-                </div>
-
-                <div class="md:col-span-5">
-                  <label for="estado">Estado</label>
-                  <select name="estado" id="estado" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
-                    <option value="Completada">En proceso</option>
-                    <option value="Cancelada">Cancelada</option>
-                    <option value="En proceso">Completada</option>
-                  </select>
-                </div>
-
-                <div class="md:col-span-5 text-right">
-                  <div class="inline-flex items-end">
-                    <button class="text-black font-bold py-2 px-4 rounded" style="background-color: #daffef; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#247b7b'"  onmouseout="this.style.backgroundColor='#daffef'">Agendar</button>
-                  </div>
-                </div>
-
-              </div>
+                </select>
             </div>
-          </div>
+
+            <!-- Fecha -->
+            <div>
+              <label for="fecha">Fecha</label>
+              <input type="date" name="fecha" id="fecha" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" required />
+            </div>
+
+            <!-- Hora -->
+            <div>
+              <label for="hora">Hora</label>
+              <input type="time" name="hora" id="hora" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" required />
+            </div>
+
+            <!-- Estado -->
+            <div>
+                <label for="estado">Estado</label>
+                <select name="estado" id="estado" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50">
+                    <option value="En proceso">En proceso</option>
+                    <option value="Completada">Completada</option>
+                    <option value="Cancelada">Cancelada</option>
+                </select>
+            </div>
+
+            <button type="submit">Registrar</button>
         </form>
-      </div>
     </div>
-  </div>
 </div>
+<br><br>
 @endsection

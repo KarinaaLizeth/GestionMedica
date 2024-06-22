@@ -16,10 +16,10 @@ body {
     align-items: center;
     background-color: #E8F5E9;
     border-radius: 10px;
-    /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
     padding: 40px;
     width: 90%;
     max-width: 1200px;
+    height: 95%;
 }
 
 .form-container {
@@ -93,8 +93,7 @@ body {
 }
 
 .form-container form div button:hover {
-    background-color: #dbffde;
-    color: black;
+    background-color: #83c5be;
 }
 
 .image-container {

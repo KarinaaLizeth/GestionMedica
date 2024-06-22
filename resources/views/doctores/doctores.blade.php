@@ -3,7 +3,6 @@
 @section('content')
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg bg-white dark:bg-gray-900 p-4">
     <div class="flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 mb-4">
-        <!-- Input de búsqueda a la izquierda -->
         <div class="flex items-center space-x-4">
             <label for="table-search" class="sr-only">Search</label>
             <div class="relative">
@@ -15,10 +14,10 @@
                 <input type="text" id="table-search-users" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar doctor">
             </div>
         </div>
-        <!-- Botón a la derecha -->
         <div class="flex items-center">
-            <a href="{{ route('doctores.crear') }}" class="text-black bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" style="background-color: #daffef; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#247b7b'"  onmouseout="this.style.backgroundColor='#daffef'">
-                Agregar Doctor
+            <a href="{{ route('doctores.crear') }}" class="text-white focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" style="background-color: #247b7b; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#83c5be'"  onmouseout="this.style.backgroundColor='#247b7b'">
+            <ion-icon name="add-circle-outline" style="font-size: 1.3em; vertical-align: middle;" class="mr-1"></ion-icon>    
+            Agregar Doctor
             </a>
         </div>
     </div>
@@ -30,7 +29,7 @@
                 <th scope="col" class="px-6 py-3">Correo</th>
                 <th scope="col" class="px-6 py-3">Teléfono</th>
                 <th scope="col" class="px-6 py-3">Especialidad</th>
-                <th scope="col" class="px-6 py-3">Consultorio</th>
+                <th scope="col" class="px-6 py-3">Costo consulta</th>
                 <th scope="col" class="px-6 py-3">Acción</th>
             </tr>
         </thead>
@@ -42,13 +41,13 @@
                 <td class="px-6 py-4">{{ $doctor->correo }}</td>
                 <td class="px-6 py-4">{{ $doctor->telefono }}</td>
                 <td class="px-6 py-4">{{ $doctor->especialidad }}</td>
-                <td class="px-6 py-4">{{ $doctor->consultorio }}</td>
+                <td class="px-6 py-4">{{ $doctor->precio_consulta }}</td>
                 <td class="px-6 py-4">
-                    <a href="{{ route('doctores.editar', $doctor->id) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editar</a>
+                    <a href="{{ route('doctores.editar', $doctor->id) }}" class=" text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="create-outline"></ion-icon> Editar</a>
                     <form action="{{ route('doctores.eliminar', $doctor->id) }}" method="POST" style="display:inline">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="font-medium text-red-600 dark:text-red-500 hover:underline" onclick="return confirm('¿Estás seguro de que deseas eliminar a esta secretaria?')">Eliminar</button>
+                        <button type="submit" class=" text-red-600 dark:text-red-500 hover:underline" onclick="return confirm('¿Estás seguro de que deseas eliminar a esta secretaria?')"><ion-icon name="trash-outline"></ion-icon> Eliminar</button>
                     </form>
                 </td>
             </tr>

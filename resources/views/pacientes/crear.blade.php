@@ -1,40 +1,96 @@
 @extends('layouts.app')
+<link rel="stylesheet" href="{{ asset('css/crear.css') }}">
 
 @section('content')
-<form class="max-w-sm mx-auto" method="POST" action="{{ route('pacientes.store') }}">
-    @csrf
-    <div class="mb-5">
-        <label for="nombres" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombres</label>
-        <input type="text" id="nombres" name="nombres" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
+<br>
+<div class="formulario-agregar-container">
+    <div class="informacion-header">
+        <h3>Información Personal</h3>
+        <a href="{{ route('pacientes.index') }}"><ion-icon name="arrow-back-outline" class="mr-2"></ion-icon>Lista de pacientes</a>
     </div>
-    <div class="mb-5">
-        <label for="apellidos" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellidos</label>
-        <input type="text" id="apellidos" name="apellidos" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
+    <div class="formulario-agregar">
+        <h3>Agregar Paciente</h3>
+        <form method="POST" action="{{ route('pacientes.store') }}">
+            @csrf
+
+            <!-- Nombres -->
+            <div> 
+                <label for="nombres">Nombres</label>
+                <input type="text" id="nombres" name="nombres" required />
+            </div>
+
+            <!-- Apellidos -->
+            <div>
+                <label for="apellidos">Apellidos</label>
+                <input type="text" id="apellidos" name="apellidos" required />
+            </div>
+
+            <!-- Email -->
+            <div class="col-span-1 md:col-span-2">
+                <label for="correo">Correo</label>
+                <input type="email" id="correo" name="correo" required />
+            </div>
+
+            <!-- Teléfono -->
+            <div>
+                <label for="telefono">Teléfono</label>
+                <input type="number" id="telefono" name="telefono" required />
+            </div>
+
+            <!-- Teléfono Emergencia -->
+            <div>
+                <label for="telefono_emergencia">Teléfono de Emergencia</label>
+                <input type="number" id="telefono_emergencia" name="telefono_emergencia" required />
+            </div>
+
+            <!-- Género -->
+            <div>
+                <label for="genero">Género</label>
+                <div class="genero-opciones">
+                    <label><input type="radio" name="genero" value="femenino" required> Femenino</label>
+                    <label><input type="radio" name="genero" value="masculino" required> Masculino</label>
+                    <label><input type="radio" name="genero" value="otro" required> Otro</label>
+                </div>
+            </div>
+
+            <!-- Fecha de nacimiento -->
+            <div>
+                <label for="fecha_nacimiento">Fecha de nacimiento:</label>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+            </div>
+
+            <!-- Altura -->
+            <div>
+                <label for="altura">Altura (en centímetros)</label>
+                <input type="number" id="altura" name="altura" required />
+            </div>
+
+            <!-- Peso -->
+            <div>
+                <label for="peso">Peso (en kilogramos)</label>
+                <input type="number" step="0.01" id="peso" name="peso" required />
+            </div>
+
+            <!-- Tipo sangre -->
+            <div>
+                <label for="sangre">Tipo de sangre</label>
+                <select id="sangre" name="sangre">
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                </select>
+            </div>
+
+            <!-- Alergias -->
+            <div>
+                <label for="alergias">Alergias</label>
+                <textarea id="alergias" name="alergias"></textarea>
+            </div>
+
+            <button type="submit">Registrar</button>
+        </form>
     </div>
-    <div class="mb-5">
-        <label for="correo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo</label>
-        <input type="email" id="correo" name="correo" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
-    </div>
-    <div class="mb-5">
-        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
-        <input type="password" id="password" name="password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
-    </div>
-    <div class="mb-5">
-        <label for="password_confirmation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirmar contraseña</label>
-        <input type="password" id="password_confirmation" name="password_confirmation" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
-    </div>
-    <div class="mb-5">
-        <label for="telefono" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Teléfono</label>
-        <input type="tel" id="telefono" name="telefono" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
-    </div>
-    <div class="mb-5">
-        <label for="direccion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección</label>
-        <input type="text" id="direccion" name="direccion" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
-    </div>
-    <div class="mb-5">
-        <label for="edad" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Edad</label>
-        <input type="number" id="edad" name="edad" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
-    </div>
-    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Registrar</button>
-</form>
+</div>
+<br><br>
 @endsection

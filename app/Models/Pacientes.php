@@ -15,26 +15,19 @@ class Pacientes extends Authenticatable
         'nombres',
         'apellidos',
         'correo',
-        'password',
-        'telefono',  
-        'direccion',
-        'edad',
-   
+        'telefono',
+        'telefono_emergencia',
+        'genero',
+        'fecha_nacimiento',
+        'altura',
+        'peso',
+        'sangre',
+        'alergias',
     ];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
+    protected $casts = [
+        'fecha_nacimiento' => 'date',
     ];
-
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-
-    }
 
     // Relación con Citas
     public function citas()

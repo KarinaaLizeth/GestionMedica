@@ -7,19 +7,25 @@
 
     <title>{{ config('app.name', 'HealthPlus') }}</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <!--calendario-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.css">
 
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/crear.css') }}">
+    @stack('styles')
 </head>
-<body class="font-sans text-gray-900 antialiased">
+<body class="bg-custom-white font-poppins">
     <div class="flex justify-center items-center min-h-screen">
         <div class="container">
             {{ $slot }}
         </div>
     </div>
+        <!-- FullCalendar JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.js"></script>
+    @stack('scripts')
 </body>
 </html>

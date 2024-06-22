@@ -1,9 +1,7 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -11,37 +9,41 @@ class Doctores extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    //atributos 
+    protected $table = 'doctores';
+
     protected $fillable = [
-        'nombres',
-        'apellidos',
-        'correo',
-        'password',
-        'telefono',  
-        'especialidad',
-        'consultorio',
-   
+        'nombres', 
+        'apellidos', 
+        'correo', 
+        'password', 
+        'telefono', 
+        'especialidad', 
+        'precio_consulta', 
+        'duracion_cita'
     ];
 
-    //atributos que son ocultos
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    //atributos que son convertidos cuando se acceden a ellos
-    protected function casts(): array
+    public function diasTrabajo()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-
+        return $this->hasMany(DiaTrabajo::class, 'doctor_id');
     }
 
-    // Relación con Citas
-    public function citas()
+    public function horarios()
     {
-        return $this->hasMany(Citas::class, 'doctor_id');
+        return $this->hasMany(Horario::class, 'doctor_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($doctor) {
+            $doctor->diasTrabajo()->delete();
+            $doctor->horarios()->delete();
+        });
     }
 }

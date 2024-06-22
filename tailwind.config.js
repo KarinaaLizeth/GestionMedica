@@ -9,9 +9,18 @@ export default {
       "./resources/**/*.vue",
     ],
     theme: {
-      extend: {},
+      extend: {
+        fontFamily: {
+          poppins: ['Poppins', 'sans-serif'],
+      },
+      colors: {
+        'custom-white': '#ffffff',
+      },
     },
-    plugins: [],
+  },
+    plugins: [
+      forms,
+    ],
   }
 
 

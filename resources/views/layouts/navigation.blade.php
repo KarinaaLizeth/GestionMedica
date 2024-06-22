@@ -28,9 +28,6 @@
                     <x-nav-link :href="route('servicios.index')" :active="request()->routeIs('servicios.index')" class="text-black">
                         {{ __('Servicios') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('productos.index')" :active="request()->routeIs('productos.index')" class="text-black">
-                        {{ __('Productos') }}
-                    </x-nav-link>
                     <x-nav-link :href="route('citas.index')" :active="request()->routeIs('citas.index')" class="text-black">
                         {{ __('Citas') }}
                     </x-nav-link>
@@ -41,7 +38,7 @@
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blackfocus:outline-none transition ease-in-out duration-150" style="background-color: #247b7b !important; coloblack!important;" onmouseover="this.style.backgroundColor='#508f8a'" onmouseout="this.style.backgroundColor='#247b7b'">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blackfocus:outline-none transition ease-in-out duration-150" style="background-color: #83c5be !important; coloblack!important;" onmouseout="this.style.backgroundColor='#83c5be'">
                             <div>{{ Auth::user()->name }}</div>
                             <div class="ml-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

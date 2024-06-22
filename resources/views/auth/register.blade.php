@@ -1,3 +1,5 @@
+
+<link rel="stylesheet" href="{{ asset('css/login.css') }}">
 <x-guest-layout>
     <div class="form-container">
         <h2>REGISTRARSE</h2>

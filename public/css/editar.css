@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+body {
+    background-color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.formulario-editar-container {
+    width: 60%;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.informacion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.informacion-header h3 {
+    color: #333;
+    margin: 0;
+    font-size: 13px;
+}
+
+.informacion-header a {
+    display: flex;
+    align-items: center;
+    background-color: #247b7b;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.informacion-header a ion-icon {
+    margin-right: 8px;
+}
+
+.informacion-header a:hover {
+    background-color: #83c5be;
+}
+
+.formulario-editar h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.formulario-editar form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.formulario-editar form .full-width {
+    grid-column: span 2;
+}
+
+.formulario-editar form div {
+    display: flex;
+    flex-direction: column;
+}
+
+.formulario-editar label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.formulario-editar input[type="text"],
+.formulario-editar input[type="email"],
+.formulario-editar input[type="password"],
+.formulario-editar input[type="number"],
+.formulario-editar input[type="time"],
+.formulario-editar input[type="date"],
+.formulario-editar select,
+.formulario-editar textarea{
+    background-color: #f4f4f4;
+    border: none;
+    font-size: 13px;
+    border-radius: 3px;
+    width: 100%;
+    outline: none;
+    padding: 5px 10px;
+    height: 35px;
+}
+
+.formulario-editar button {
+    grid-column: span 2;
+    padding: 10px;
+    font-size: 13px;
+    color: #fff;
+    background-color: #247b7b;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin: auto;
+    width: 50%;
+}
+
+.formulario-editar button:hover {
+    background: #83c5be;
+}
+
+
+
+@media (max-width: 768px) {
+    .formulario-editar form {
+        grid-template-columns: 1fr;
+    }
+
+    .formulario-editar button {
+        grid-column: span 1;
+    }
+}

@@ -5,9 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DoctoresController;
 use App\Http\Controllers\PacientesController;
 use App\Http\Controllers\ServiciosController;
-use App\Http\Controllers\ProductosController;
 use App\Http\Controllers\SecretariasController;
 use App\Http\Controllers\CitasController;
+use App\Http\Controllers\FullCalendarController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -46,15 +46,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/servicios/{servicio}', [ServiciosController::class, 'actualizar'])->name('servicios.actualizar');
     Route::delete('/servicios/{servicio}', [ServiciosController::class, 'eliminar'])->name('servicios.eliminar');
 
-    // Rutas para productos
-    Route::get('/productos', [ProductosController::class, 'index'])->name('productos.index');
-    Route::get('/productos/crear', [ProductosController::class, 'crear'])->name('productos.crear');
-    Route::post('/productos', [ProductosController::class, 'store'])->name('productos.store');
-    Route::get('/productos/{producto}/editar', [ProductosController::class, 'editar'])->name('productos.editar');
-    Route::put('/productos/{producto}', [ProductosController::class, 'actualizar'])->name('productos.actualizar');
-    Route::delete('/productos/{producto}', [ProductosController::class, 'eliminar'])->name('productos.eliminar');
-
-
     // Rutas para secretarias
     Route::get('/secretarias', [SecretariasController::class, 'index'])->name('secretarias.index');
     Route::get('/secretarias/crear', [SecretariasController::class, 'crear'])->name('secretarias.crear');
@@ -67,10 +58,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/citas', [CitasController::class, 'index'])->name('citas.index');
     Route::get('/citas/crear', [CitasController::class, 'crear'])->name('citas.crear');
     Route::post('/citas', [CitasController::class, 'store'])->name('citas.store');
-    Route::get('/citas/{secretaria}/editar', [CitasController::class, 'editar'])->name('citas.editar');
-    Route::put('/citas/{secretaria}', [CitasController::class, 'actualizar'])->name('citas.actualizar');
-    Route::delete('/citas/{secretaria}', [CitasController::class, 'eliminar'])->name('citas.eliminar');
-
+    Route::get('/citas/{id}/editar', [CitasController::class, 'editar'])->name('citas.editar');
+    Route::put('/citas/{id}', [CitasController::class, 'actualizar'])->name('citas.actualizar');
+    Route::delete('/citas/{id}', [CitasController::class, 'eliminar'])->name('citas.eliminar');
+    
+    Route::get('/', [FullCalendarController::class, 'index'])->name('index');
 });
 
 require __DIR__.'/auth.php';
