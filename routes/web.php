@@ -9,9 +9,10 @@ use App\Http\Controllers\SecretariasController;
 use App\Http\Controllers\CitasController;
 use App\Http\Controllers\FullCalendarController;
 
+// Ruta para la página de bienvenida
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -61,8 +62,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/citas/{id}/editar', [CitasController::class, 'editar'])->name('citas.editar');
     Route::put('/citas/{id}', [CitasController::class, 'actualizar'])->name('citas.actualizar');
     Route::delete('/citas/{id}', [CitasController::class, 'eliminar'])->name('citas.eliminar');
-    
-    Route::get('/', [FullCalendarController::class, 'index'])->name('index');
+    Route::get('/citas/lista', [CitasController::class, 'lista'])->name('citas.lista');
+    Route::get('/citas/{id}/cambiar-estado/{estado}', [CitasController::class, 'cambiarEstado'])->name('citas.cambiarEstado');
+    Route::get('/horarios-disponibles', [CitasController::class, 'getHorariosDisponibles']);
+    Route::get('/citas-eventos', [CitasController::class, 'getCitasEventos']);
+    Route::get('/citas-dia', [CitasController::class, 'getCitasPorDia']);
 });
 
 require __DIR__.'/auth.php';

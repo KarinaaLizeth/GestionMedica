@@ -1,0 +1,110 @@
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.tab-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.tab-item {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.tab-item.active {
+    border-bottom: 2px solid #247b7b;
+    font-weight: bold;
+}
+
+.appointments-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.appointments-table th, .appointments-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    font-size: 13px;
+}
+
+.appointments-table th {
+    background-color: #83c5be;
+    font-size: 13px;
+    font-weight: 450;
+    color: white;
+    border: none;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination a {
+    margin: 0 5px;
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    color: #247b7b;
+}
+
+.pagination a:hover {
+    background-color: #247b7b;
+    color: white;
+}
+
+.pagination .active {
+    background-color: #247b7b;
+    color: white;
+    border: 1px solid #247b7b;
+}
+
+.btn-primary{
+    background-color: #247b7b;
+    color: white;
+    border: 1px solid #247b7b;
+    font-size: 12px;
+}
+
+.btn-primary:hover{
+    background-color: #83c5be;
+
+}
+
+.btn {
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 5px;
+  }
+  
+.btn-success{
+    background-color: #34c38f;
+}
+.btn-danger{
+    background-color: #f46a6a;
+}
+
+.btn-danger:hover {
+    background-color: #cf5a5a;
+}
+.btn-success:hover{
+    background-color: #2ca67a;
+}
+
+.btn-editar {
+    background-color: #247b7b;
+}
+.btn-editar:hover{
+    background-color: #83c5be;
+}

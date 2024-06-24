@@ -211,7 +211,31 @@ body {
 
 }
 
+.horarios-list, .citas-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
 
+.horario-label, .cita-label {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #fff;
+    cursor: pointer;
+    display: inline-block;
+    width: auto;
+}
+
+.horario-radio, .cita-radio {
+    display: none;
+}
+
+.horario-radio:checked + label, .cita-radio:checked + label {
+    background: #007bff !important;
+    color: #fff !important;
+    border-color: #007bff !important;
+}
 
 @media (max-width: 768px) {
     .formulario-agregar form {

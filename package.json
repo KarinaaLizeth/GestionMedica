@@ -19,6 +19,7 @@
         "@fullcalendar/core": "^6.1.14",
         "@fullcalendar/daygrid": "^6.1.14",
         "@fullcalendar/timegrid": "^6.1.14",
-        "select2": "^4.1.0-rc.0"
+        "select2": "^4.1.0-rc.0",
+        "sweetalert2": "^11.12.0"
     }
 }
