@@ -14,6 +14,9 @@
     <!--calendario-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.3/main.min.css">
 
+    <!--sweetalert-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
@@ -22,10 +25,7 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="{{ asset('css/crear.css') }}">
-
-</head>
+ </head>
 <body class="bg-custom-white font-poppins">
 @stack('scripts')
     <div class="min-h-screen bg-custom-white">

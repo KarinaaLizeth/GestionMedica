@@ -27,23 +27,34 @@ class Doctores extends Authenticatable
         'remember_token',
     ];
 
+    // relación uno a muchos con DiaTrabajo
     public function diasTrabajo()
     {
         return $this->hasMany(DiaTrabajo::class, 'doctor_id');
     }
 
+    // relación uno a muchos con Horario
     public function horarios()
     {
         return $this->hasMany(Horario::class, 'doctor_id');
     }
 
-    protected static function boot()
+    // relación uno a muchos con Citas
+    public function citas()
     {
-        parent::boot();
-
-        static::deleting(function ($doctor) {
-            $doctor->diasTrabajo()->delete();
-            $doctor->horarios()->delete();
-        });
+        return $this->hasMany(Citas::class);
     }
+
+    // relación muchos a muchos con Role
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'doctor_roles', 'doctor_id', 'role_id');
+    }
+    
+    // método para verificar si el doctor tiene un rol específico
+    public function hasRole($roleName)
+    {
+        return $this->roles()->where('nombre', $roleName)->exists();
+    }
+
 }

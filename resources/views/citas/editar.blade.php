@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<link rel="stylesheet" href="{{ asset('css/crear.css') }}">
 @vite(['resources/js/pages/editar_citas.js'])
 @section('content')
 <br>

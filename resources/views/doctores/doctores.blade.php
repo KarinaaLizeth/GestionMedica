@@ -2,6 +2,38 @@
 
 @section('content')
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg bg-white dark:bg-gray-900 p-4">
+    @if (session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    icon: 'success',
+                    title: '{{ session('success') }}'
+                });
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    icon: 'error',
+                    title: '{{ session('error') }}'
+                });
+            });
+        </script>
+    @endif
+
     <div class="flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 mb-4">
         <div class="flex items-center space-x-4">
             <label for="table-search" class="sr-only">Search</label>
@@ -44,10 +76,10 @@
                 <td class="px-6 py-4">{{ $doctor->precio_consulta }}</td>
                 <td class="px-6 py-4">
                     <a href="{{ route('doctores.editar', $doctor->id) }}" class=" text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="create-outline"></ion-icon> Editar</a>
-                    <form action="{{ route('doctores.eliminar', $doctor->id) }}" method="POST" style="display:inline">
+                    <button type="button" class=" text-red-600 dark:text-red-500 hover:underline" onclick="confirmDelete({{ $doctor->id }})"><ion-icon name="trash-outline"></ion-icon> Eliminar</button>
+                    <form id="delete-form-{{ $doctor->id }}" action="{{ route('doctores.eliminar', $doctor->id) }}" method="POST" style="display: none;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class=" text-red-600 dark:text-red-500 hover:underline" onclick="return confirm('¿Estás seguro de que deseas eliminar a esta secretaria?')"><ion-icon name="trash-outline"></ion-icon> Eliminar</button>
                     </form>
                 </td>
             </tr>
@@ -55,4 +87,81 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    function confirmDelete(doctorId) {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        });
+
+        swalWithBootstrapButtons.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminarlo',
+            cancelButtonText: 'No, cancelar',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + doctorId).submit();
+                swalWithBootstrapButtons.fire(
+                    '¡Eliminado!',
+                    'El doctor ha sido eliminado.',
+                    'success'
+                );
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire(
+                    'Cancelado',
+                    'El doctor está a salvo :)',
+                    'error'
+                );
+            }
+        });
+    }
+</script>
+
+@if ($errors->any())
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Errores de Validación',
+            html: '<ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
+            confirmButtonText: 'Aceptar'
+        });
+    });
+</script>
+@endif
+
+@if (session('success'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: '{{ session('success') }}',
+            confirmButtonText: 'Aceptar'
+        });
+    });
+</script>
+@endif
+
+@if (session('error'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: '{{ session('error') }}',
+            confirmButtonText: 'Aceptar'
+        });
+    });
+</script>
+@endif
+
 @endsection

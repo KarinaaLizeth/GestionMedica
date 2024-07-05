@@ -2,9 +2,35 @@
 
 @section('content')
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg bg-white dark:bg-gray-900 p-4">
+    @if (session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'Aceptar'
+            });
+        });
+    </script>
+    @endif
+
+    @if ($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Errores de Validación',
+                html: '<ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
+                confirmButtonText: 'Aceptar'
+            });
+        });
+    </script>
+    @endif
+
     <div class="flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 mb-4">
         <div class="flex items-center space-x-4">
-            <label for="table-search" class="sr-only">Search</label>
+            <label for="table-search" class="sr-only">Buscar</label>
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 flex items-center ps-3 pointer-events-none">
                     <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -38,10 +64,10 @@
                 <td class="px-6 py-4">{{ $servicio->descripcion }}</td>
                 <td class="px-6 py-4">
                     <a href="{{ route('servicios.editar', $servicio->id) }}" class=" text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="create-outline"></ion-icon> Editar</a>
-                    <form action="{{ route('servicios.eliminar', $servicio->id) }}" method="POST" style="display:inline">
+                    <button type="button" class="text-red-600 dark:text-red-500 hover:underline" onclick="confirmDelete({{ $servicio->id }})"><ion-icon name="trash-outline"></ion-icon> Eliminar</button>
+                    <form id="delete-form-{{ $servicio->id }}" action="{{ route('servicios.eliminar', $servicio->id) }}" method="POST" style="display:none">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class=" text-red-600 dark:text-red-500 hover:underline" onclick="return confirm('¿Estás seguro de que deseas eliminar este servicio?')"><ion-icon name="trash-outline"></ion-icon> Eliminar</button>
                     </form>
                 </td>
             </tr>
@@ -49,5 +75,45 @@
         </tbody>
     </table>
 </div>
-@endsection
 
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+
+    @if (session('success'))
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: '{{ session('success') }}',
+            confirmButtonText: 'Aceptar'
+        });
+    });
+    @endif
+
+    @if ($errors->any())
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Errores de Validación',
+            html: '<ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
+            confirmButtonText: 'Aceptar'
+        });
+    });
+    @endif
+</script>
+@endsection

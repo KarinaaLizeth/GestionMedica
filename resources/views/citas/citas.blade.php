@@ -24,8 +24,8 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Paciente</th>
                         <th>Doctor</th>
+                        <th>Paciente</th>
                         <th>Hora</th>
                         <th>Estado</th>
                     </tr>

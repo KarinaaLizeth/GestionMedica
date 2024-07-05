@@ -13,6 +13,7 @@ class DiaTrabajo extends Model
 
     protected $fillable = ['doctor_id', 'dia'];
 
+    // relación uno a muchos con Doctores
     public function doctor()
     {
         return $this->belongsTo(Doctores::class, 'doctor_id');

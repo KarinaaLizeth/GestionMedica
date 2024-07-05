@@ -13,6 +13,7 @@ class Horario extends Model
 
     protected $fillable = ['doctor_id', 'hora_inicio', 'hora_fin'];
 
+    // relación uno a muchos con Doctores
     public function doctor()
     {
         return $this->belongsTo(Doctores::class, 'doctor_id');

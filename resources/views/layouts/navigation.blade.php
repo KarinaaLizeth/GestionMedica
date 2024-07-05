@@ -31,6 +31,15 @@
                     <x-nav-link :href="route('citas.index')" :active="request()->routeIs('citas.index')" class="text-black">
                         {{ __('Citas') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('consultas.lista')" :active="request()->routeIs('citas.index')" class="text-black">
+                        {{ __('Consultas') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('rol.index')" :active="request()->routeIs('citas.index')" class="text-black">
+                        {{ __('Roles') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('doctores.lista')" :active="request()->routeIs('citas.index')" class="text-black">
+                        {{ __('Lista Doctores') }}
+                    </x-nav-link>
                 </div>
             </div>
 

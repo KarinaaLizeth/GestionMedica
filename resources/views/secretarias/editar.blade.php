@@ -37,9 +37,35 @@
                 <input type="tel" id="telefono" name="telefono" value="{{ $secretaria->telefono }}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
             </div>
 
-
             <button type="submit">Actualizar</button>
         </form>
     </div>
 </div>
+
+@if (session('success'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: '{{ session('success') }}',
+            confirmButtonText: 'Aceptar'
+        });
+    });
+</script>
+@endif
+
+@if ($errors->any())
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Errores de Validación',
+            html: '<ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
+            confirmButtonText: 'Aceptar'
+        });
+    });
+</script>
+@endif
+
 @endsection

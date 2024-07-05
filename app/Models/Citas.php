@@ -17,13 +17,15 @@ class Citas extends Model
         'estado',   
     ];
 
-   public function paciente()
-   {
-       return $this->belongsTo(Pacientes::class, 'paciente_id');
-   }
+    // relación uno a muchos con Pacientes
+    public function paciente()
+    {
+        return $this->belongsTo(Pacientes::class, 'paciente_id');
+    }
 
-   public function doctor()
-   {
-       return $this->belongsTo(Doctores::class, 'doctor_id');
-   }
+    // relación uno a muchos con Doctores
+    public function doctor()
+    {
+        return $this->belongsTo(Doctores::class, 'doctor_id');
+    }
 }

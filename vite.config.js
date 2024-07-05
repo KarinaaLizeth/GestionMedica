@@ -18,6 +18,7 @@ export default defineConfig({
                 'resources/js/pages/citas.js',
                 'resources/js/pages/editar_citas.js',
                 'resources/js/pages/crear_doctores.js',
+                'resources/js/pages/consultastextarea.js',
             ],
             refresh: true,
         }),

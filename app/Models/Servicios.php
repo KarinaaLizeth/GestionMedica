@@ -9,11 +9,24 @@ use Illuminate\Notifications\Notifiable;
 
 class Servicios extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
+    // atributos que se pueden asignar masivamente
     protected $fillable = [
         'nombre',
         'descripcion',
         'precio',   
     ];
+
+    // relación muchos a muchos con Consultas a través de la tabla pivot servicios_consulta
+    public function consultas()
+    {
+        return $this->belongsToMany(Consultas::class, 'servicios_consulta', 'servicio_id', 'consulta_id');
+    }
+
+    // relación uno a muchos con ServiciosConsulta
+    public function serviciosConsulta()
+    {
+        return $this->hasMany(ServiciosConsulta::class, 'consulta_id');
+    }
 }

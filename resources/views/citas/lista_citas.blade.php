@@ -60,8 +60,11 @@
                                 <a href="{{ route('citas.cambiarEstado', ['id' => $cita->id, 'estado' => 'cancelada']) }}" class="btn btn-danger" style="margin-right: 10px;">
                                     Cancelar
                                 </a>
-                                <a href="{{ route('citas.editar', ['id' => $cita->id, 'estado' => 'en proceso']) }}" class="btn btn-editar">
+                                <a href="{{ route('citas.editar', ['id' => $cita->id, 'estado' => 'en proceso']) }}" class="btn btn-editar" style="margin-right: 10px;">
                                     Editar
+                                </a>
+                                <a href="{{ route('consultas.crear', ['cita_id' => $cita->id]) }}" class="btn btn-consulta" >
+                                    Ir a consulta
                                 </a>
                             </td>
                         @else

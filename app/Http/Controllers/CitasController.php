@@ -58,7 +58,7 @@ class CitasController extends Controller
         $request->validate([
             'paciente_id' => 'required|exists:pacientes,id',
             'doctor_id' => 'required|exists:doctores,id',
-            'fecha' => 'required|date',
+            'fecha' => 'required|date|after_or_equal:today',
             'hora' => 'required|date_format:H:i',
         ]);
 
@@ -117,7 +117,7 @@ class CitasController extends Controller
         $request->validate([
             'paciente_id' => 'required|exists:pacientes,id',
             'doctor_id' => 'required|exists:doctores,id',
-            'fecha' => 'required|date',
+            'fecha' => 'required|date|after_or_equal:today',
             'hora' => 'required',
         ]);
 

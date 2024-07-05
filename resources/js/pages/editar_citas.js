@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     horariosContainer.innerHTML = '';
                     citasContainer.innerHTML = '';
                     document.getElementById('citas-container').style.display = 'none';
+
+                    const citasReservadas = data.citasReservadas; // Obtiene las citas ya reservadas
+
                     data.horarios.forEach(horario => {
                         const label = document.createElement('label');
                         label.classList.add('horario-label');
@@ -27,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         input.classList.add('horario-radio');
                         input.addEventListener('change', () => {
                             horaInput.value = horario.hora_inicio;
-                            mostrarCitasDisponibles(horario.hora_inicio, horario.hora_fin, data.duracion_cita);
+                            mostrarCitasDisponibles(horario.hora_inicio, horario.hora_fin, data.duracion_cita, citasReservadas);
                         });
 
                         label.appendChild(input);
@@ -38,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function mostrarCitasDisponibles(horaInicio, horaFin, duracionCita) {
+    function mostrarCitasDisponibles(horaInicio, horaFin, duracionCita, citasReservadas) {
         const inicio = new Date(`1970-01-01T${horaInicio}Z`);
         const fin = new Date(`1970-01-01T${horaFin}Z`);
         const duracion = duracionCita * 60 * 1000; // Duración de la cita en milisegundos
@@ -49,21 +52,25 @@ document.addEventListener('DOMContentLoaded', function() {
             const endTime = new Date(time.getTime() + duracion);
             if (endTime > fin) break;
 
-            const label = document.createElement('label');
-            label.classList.add('cita-label');
+            const timeString = time.toISOString().substring(11, 16);
 
-            const input = document.createElement('input');
-            input.type = 'radio';
-            input.name = 'cita';
-            input.value = time.toISOString().substring(11, 16);
-            input.classList.add('cita-radio');
-            input.addEventListener('change', () => {
-                horaInput.value = time.toISOString().substring(11, 16);
-            });
+            if (!citasReservadas.includes(timeString)) {
+                const label = document.createElement('label');
+                label.classList.add('cita-label');
 
-            label.appendChild(input);
-            label.appendChild(document.createTextNode(`${time.toISOString().substring(11, 16)} to ${endTime.toISOString().substring(11, 16)}`));
-            citasContainer.appendChild(label);
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = 'cita';
+                input.value = timeString;
+                input.classList.add('cita-radio');
+                input.addEventListener('change', () => {
+                    horaInput.value = timeString;
+                });
+
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(`${timeString} to ${endTime.toISOString().substring(11, 16)}`));
+                citasContainer.appendChild(label);
+            }
         }
     }
 

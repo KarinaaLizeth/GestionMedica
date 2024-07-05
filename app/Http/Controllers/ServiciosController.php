@@ -13,57 +13,75 @@ use Illuminate\Http\RedirectResponse;
 
 class ServiciosController extends Controller
 {
-    //Mostrar vista register cuando se de clic en crear 
+    // mostrar la vista principal con la lista de servicios
     public function index(): View
     {
+        // obtener todos los servicios de la bd
         $servicios = Servicios::all();
         return view('servicios.servicios', ['servicios' => $servicios]);
     }
 
-    // Método para mostrar el formulario de edición
+    // mostrar el formulario de edición para un servicio específico
     public function editar($id): View
     {
+        // buscar el servicio por su id
         $servicio = Servicios::findOrFail($id);
         return view('servicios.editar', compact('servicio'));
     }
     
-
-    // formulario de crear servicio
+    // mostrar el formulario para crear un nuevo servicio
     public function crear(): View
     {
+        // retornar la vista 'servicios.crear'
         return view('servicios.crear');
     }
 
-       public function store(Request $request): RedirectResponse
-     {
-         $request->validate([
-             'nombre' => ['required', 'string', 'max:255'],
-             'descripcion' => ['required', 'string', 'max:255'],
-             'precio' => ['required', 'int'],
-         ]);
-     
-         $servicio = servicios::create([
-             'nombre' => $request->nombre,
-             'descripcion' => $request->descripcion,
-             'precio' => $request->precio,
-         ]);
-     
-         return redirect()->route('servicios.index')->with('success', 'Nuevo servicio agregado.');
-     }
-     
-     
-    // Método para actualizar el servicio
-    public function actualizar(Request $request, $id): RedirectResponse
+    // validar y crear un nuevo servicio
+    public function store(Request $request): RedirectResponse
     {
+        // validar los datos del formulario
         $request->validate([
             'nombre' => ['required', 'string', 'max:255'],
-             'descripcion' => ['required', 'string', 'max:255'],
-             'precio' => ['required', 'int'],
+            'descripcion' => ['required', 'string', 'max:255'],
+            'precio' => ['required', 'int'],
         ]);
 
-        $servicio = servicios::findOrFail($id);
+        // crear un nuevo servicio con los datos validados
+        $servicio = Servicios::create([
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+            'precio' => $request->precio,
+        ]);
+
+        return redirect()->route('servicios.index')->with('success', 'Nuevo servicio agregado.');
+    }
+    
+    // validar y actualizar un servicio existente
+    public function actualizar(Request $request, $id): RedirectResponse
+    {
+        // validar los datos del formulario
+        $request->validate([
+            'nombre' => ['required', 'string', 'max:255'],
+            'descripcion' => ['required', 'string', 'max:255'],
+            'precio' => ['required', 'int'],
+        ]);
+
+        // buscar el servicio por su id
+        $servicio = Servicios::findOrFail($id);
+        // actualizar el servicio con los datos validados
         $servicio->update($request->all());
 
-        return redirect()->route('servicios.index')->with('success', 'servicio actualizado.');
+        return redirect()->route('servicios.index')->with('success', 'Servicio actualizado.');
+    }
+    
+    // eliminar un servicio existente
+    public function eliminar($id): RedirectResponse
+    {
+        // buscar el servicio por su id
+        $servicio = Servicios::findOrFail($id);
+        // eliminar el servicio de la bd
+        $servicio->delete();
+
+        return redirect()->route('servicios.index')->with('success', 'Servicio eliminado.');
     }
 }

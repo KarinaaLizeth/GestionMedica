@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Secretarias;
+use App\Models\Role;
+
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -10,6 +13,8 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse; 
+
+
 class SecretariasController extends Controller
 {
     //Mostrar vista register cuando se de clic en crear, se obtienen todos los registros de la tabla secretarias para mostrarlos en la vista
@@ -19,7 +24,7 @@ class SecretariasController extends Controller
         return view('secretarias.secretarias', ['secretarias' => $secretarias]);
     }
 
-    // Método para mostrar el formulario para editarar a los secretarias
+    // mostrar el formulario para editarar a los secretarias
     public function editar(Secretarias $secretaria): View
     {
         return view('secretarias.editar', ['secretaria' => $secretaria]); //en la vista se pasan los datos del secretaria que se va a editar
@@ -32,7 +37,7 @@ class SecretariasController extends Controller
          return view('secretarias.crear');
      }
 
-     //Metodo para validar y crear el secretaria
+     //validar y crear el secretaria
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -43,6 +48,11 @@ class SecretariasController extends Controller
             'telefono' => ['required', 'int'],
         ]);
 
+        //buscar el rol antes de crear la secretaria
+        $role = Role::whereRaw('LOWER(nombre) = ?', ['secretaria'])->first();
+        if (!$role) {
+            return redirect()->route('secretarias.index')->with('error', 'Error: El rol de secretaria no existe.');
+        }
 
         $secretaria = Secretarias::create([
             'nombres' => $request->nombres,
@@ -50,6 +60,7 @@ class SecretariasController extends Controller
             'correo' => $request->correo,
             'password' => Hash::make($request->password),
             'telefono' => $request->telefono, 
+            'role_id' => $role->id,
         ]);
 
         event(new Registered($secretaria));
@@ -57,7 +68,7 @@ class SecretariasController extends Controller
         return redirect()->route('secretarias.index')->with('success', 'Nuevo secretaria agregada.');
     }
 
-    // Método para actualizar los datos del secretaria
+    // actualizar los datos del secretaria
     public function actualizar(Request $request, Secretarias $secretaria): RedirectResponse
     {
         $request->validate([
@@ -79,7 +90,7 @@ class SecretariasController extends Controller
         return redirect()->route('secretarias.index')->with('success', 'Datos de la secretaria actualizados.');
     }
 
-    //metodo eliminar un secretaria, lo busca por su id 
+    //eliminar un secretaria, lo busca por su id 
     public function eliminar($id): RedirectResponse
     {
         $secretaria = Secretarias::findOrFail($id);

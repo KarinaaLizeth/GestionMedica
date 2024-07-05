@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
 class Pacientes extends Authenticatable
 {
@@ -29,7 +29,7 @@ class Pacientes extends Authenticatable
         'fecha_nacimiento' => 'date',
     ];
 
-    // Relación con Citas
+    // relación uno a muchos con Citas
     public function citas()
     {
         return $this->hasMany(Citas::class, 'paciente_id');

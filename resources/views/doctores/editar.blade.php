@@ -80,31 +80,51 @@
             </div>
 
             <!-- Horarios disponibles -->
-            <div>
+            <div class = "col-span-1 md:col-span-2">
                 <label for="available_time">Horarios disponibles</label>
                 <div id="timeContainer">
                     @foreach ($doctor->horarios as $horario)
-                        <div class="time-input-container">
-                            <div class="time-input">
-                                <label for="available_time_from">De:</label>
-                                <input type="time" name="available_time_from[]" value="{{ $horario->hora_inicio }}" required />
-                            </div>
-                            <div class="time-input">
-                                <label for="available_time_to">A:</label>
-                                <input type="time" name="available_time_to[]" value="{{ $horario->hora_fin }}" required />
-                            </div>
-                            <div class="delete-button-container">
-                                <button type="button" class="delete-time-button"><ion-icon name="close-outline"></ion-icon></button>
-                            </div>
+                        <div class="time-input">
+                            <label for="available_time_from">De:</label>
+                            <input type="time" id="available_time_from"  name="available_time_from[]" value="{{ $horario->hora_inicio }}" required />
+                        </div>
+                        <div class="time-input">
+                            <label for="available_time_to">A:</label>
+                            <input type="time"id="available_time_to" name="available_time_to[]" value="{{ $horario->hora_fin }}" required />
                         </div>
                     @endforeach
                 </div>
-                <button type="button" id="addTimeButton" class="add-time-btn">Agregar Horario</button>
             </div>
-
+            <button type="button" id="addTimeButton" class="add-time-btn">Agregar Horario</button>
             <button type="submit">Actualizar</button>
         </form>
     </div>
 </div>
-@endsection
 
+@if (session('success'))
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: '{{ session('success') }}',
+            confirmButtonText: 'Aceptar'
+        });
+    });
+</script>
+@endif
+
+@if ($errors->any())
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Errores de Validación',
+            html: '<ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
+            confirmButtonText: 'Aceptar'
+        });
+    });
+</script>
+@endif
+
+@endsection

@@ -1,5 +1,6 @@
 @extends('layouts.app')
 <link rel="stylesheet" href="{{ asset('css/crear.css') }}">
+@vite(['resources/js/pages/editar_citas.js'])
 
 @section('content')
 <br>
@@ -41,7 +42,7 @@
 
             <!-- Horarios Disponibles -->
             <div id="horarios-container">
-                <label for="horarios">Available Time</label>
+                <label for="horarios">Horarios Disponibles</label>
                 <div id="horarios" class="horarios-list"></div>
             </div>
 

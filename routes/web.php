@@ -8,6 +8,8 @@ use App\Http\Controllers\ServiciosController;
 use App\Http\Controllers\SecretariasController;
 use App\Http\Controllers\CitasController;
 use App\Http\Controllers\FullCalendarController;
+use App\Http\Controllers\ConsultasController;
+use App\Http\Controllers\RolController;
 
 // Ruta para la página de bienvenida
 Route::get('/', function () {
@@ -30,6 +32,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/doctores/{doctor}/editar', [DoctoresController::class, 'editar'])->name('doctores.editar');
     Route::put('/doctores/{doctor}', [DoctoresController::class, 'actualizar'])->name('doctores.actualizar');
     Route::delete('/doctores/{doctor}', [DoctoresController::class, 'eliminar'])->name('doctores.eliminar');
+
+
+    //rutas para doctoresadmin
+    Route::get('/doctores/lista', [DoctoresController::class, 'lista'])->name('doctores.lista');
+    Route::post('/doctores/{id}/admin', [DoctoresController::class, 'hacerAdmin'])->name('doctores.admin');
+
+
 
     // Rutas para Pacientes
     Route::get('/pacientes', [PacientesController::class, 'index'])->name('pacientes.index');
@@ -67,6 +76,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/horarios-disponibles', [CitasController::class, 'getHorariosDisponibles']);
     Route::get('/citas-eventos', [CitasController::class, 'getCitasEventos']);
     Route::get('/citas-dia', [CitasController::class, 'getCitasPorDia']);
+
+
+    //rutas consultas
+    Route::get('/consultas', [ConsultasController::class, 'index'])->name('consultas.index');
+    Route::get('/consultas/crear', [ConsultasController::class, 'crear'])->name('consultas.crear');
+    Route::post('/consultas', [ConsultasController::class, 'store'])->name('consultas.store');
+    Route::get('/consultas/{id}/editar', [ConsultasController::class, 'editar'])->name('consultas.editar');
+    Route::put('/consultas/{id}', [ConsultasController::class, 'update'])->name('consultas.update');
+    Route::get('/consultas/crear/{paciente}', [ConsultasController::class, 'crearDesdePaciente'])->name('consultas.crear.paciente');
+    Route::get('/lista-consultas', [ConsultasController::class, 'listaConsultas'])->name('consultas.lista');
+    
+    // Rutas para roles
+    Route::get('/rol', [RolController::class, 'index'])->name('rol.index');
+    Route::get('/rol/crear', [RolController::class, 'crear'])->name('rol.crear');
+    Route::post('/rol', [RolController::class, 'store'])->name('rol.store');
+    Route::get('/role/{id}/editar', [RolController::class, 'editar'])->name('rol.editar');
+    Route::put('/rol/{id}', [RolController::class, 'actualizar'])->name('rol.actualizar');
+    Route::delete('/rol/{id}', [RolController::class, 'eliminar'])->name('rol.eliminar');
 });
 
 require __DIR__.'/auth.php';

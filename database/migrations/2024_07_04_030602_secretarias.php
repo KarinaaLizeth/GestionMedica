@@ -15,6 +15,8 @@ return new class extends Migration
             $table->string('correo')->unique();
             $table->string('password');
             $table->bigInteger('telefono');
+            $table->unsignedBigInteger('role_id'); 
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

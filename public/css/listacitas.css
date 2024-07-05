@@ -108,3 +108,10 @@
 .btn-editar:hover{
     background-color: #83c5be;
 }
+
+.btn-consulta {
+    background-color: #83c5be;
+}
+.btn-consulta:hover{
+    background-color: #247b7b;
+}
