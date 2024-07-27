@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+body {
+    background-color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.section-container {
+    width: 80%;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.informacion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.informacion-header .right-links {
+    display: flex;
+    gap: 10px; /* Espacio entre los enlaces */
+}
+
+.right-links a {
+    display: flex;
+    align-items: center;
+    background-color: #247b7b;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.right-links a ion-icon {
+    margin-right: 8px;
+}
+
+.right-links a:hover {
+    background-color: #83c5be;
+}
+
+
+.informacion-header h3 {
+    color: #333;
+    margin: 0;
+    font-size: 15px;
+}
+
+.informacion-header a {
+    display: flex;
+    align-items: center;
+    background-color: #247b7b;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.informacion-header a ion-icon {
+    margin-right: 8px;
+}
+
+.informacion-header a:hover {
+    background-color: #83c5be;
+}
+
+ion-icon {
+    margin-right: 5px;
+}
+
+.info-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.info-section {
+    width: 30%;
+}
+
+.infor-section {
+    width: 48%;
+}
+
+.info-section h4 {
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #333;
+}
+
+.info-section p {
+    margin: 2px 0;
+    color: #555;
+    font-size: 12px;
+}
+
+.consulta-info,
+.signos-vitales,
+.recetas,
+.servicios
+{
+    margin-bottom: 20px;
+}
+
+.consulta-info h4,
+.signos-vitales h4,
+.recetas h4,
+.servicios h4 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 14px;
+    text-align: center;
+}
+
+.consulta-info .motivo-notas {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.recetas table,
+.servicios table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.recetas th,
+.servicios th,
+.recetas td,
+.servicios td {
+    border: 1px solid #f2f2f2;
+    padding: 10px;
+    text-align: left;
+    font-size: 13px;
+}
+
+.recetas th,
+.servicios th {
+    background-color: #ffffff;
+}
+
+.h3infoconsulta {
+    font-size: 14px;
+    text-align: center;
+}

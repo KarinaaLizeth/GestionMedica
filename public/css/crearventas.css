@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+body {
+    background-color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.formulario-agregar input[type="text"],
+.formulario-agregar input[type="email"],
+.formulario-agregar input[type="password"],
+.formulario-agregar input[type="number"],
+.formulario-agregar input[type="time"],
+.formulario-agregar input[type="date"],
+.formulario-agregar select,
+.formulario-agregar textarea {
+    background-color: #f4f4f4;
+    border: none;
+    font-size: 13px;
+    border-radius: 3px;
+    width: 100%;
+    outline: none;
+    padding: 5px 10px;
+    height: 35px;
+}
+
+.add:hover, .removeButton:hover {
+    background-color: #007f63;
+}
+
+.formulario-agregar-container {
+    width: 80%;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.informacion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.informacion-header h3 {
+    color: #333;
+    margin: 0;
+    font-size: 20px;
+}
+
+.informacion-header a {
+    display: flex;
+    align-items: center;
+    background-color: #247b7b;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.informacion-header p ion-icon {
+    margin-right: 8px;
+}
+
+.informacion-header a:hover {
+    background-color: #83c5be;
+}
+
+.formulario-agregar {
+    width: 100%;
+}
+
+.section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.table-auto {
+    width: 90%; 
+    margin: 20px auto; 
+    font-size: 0.9em;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    overflow: hidden;
+ }
+
+.table-auto thead tr {
+    background-color: #247b7b;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+    font-size: 13px;
+
+}
+
+.table-auto th,
+.table-auto td {
+    padding: 15px 20px; 
+    text-align: left;
+    
+}
+
+.table-auto tbody tr {
+    border-bottom: 1px solid #dddddd;
+    
+}
+
+
+.input-field {
+    padding: 10px;
+    margin-right: 10px; 
+}
+
+
+.formulario-agregar .add {
+    grid-column: span 2;
+    padding: 10px;
+    font-size: 13px;
+    color: #fff;
+    background-color: #247b7b;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin: auto;
+    width: 50%;
+}
+
+.btn {
+    padding: 10px;
+    font-size: 13px;
+    color: #fff;
+    background-color: #247b7b;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin: 20px auto;
+    width: 30%;
+    display: block; 
+}
+
+.btn:hover {
+    background: #83c5be;
+}
+
+
+.add:hover{
+    background-color: #398d8d;
+} 
+
+
+
+.formulario-agregar .removeButton {
+    grid-column: span 2;
+    padding: 10px;
+    font-size: 13px;
+    color: #fff;
+    background-color: #f46a6a;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin: auto;
+    width: 50%;
+}
+
+.formulario-agregar .removeButton:hover {
+    background-color: #cf5a5a;
+}
+@media (max-width: 768px) {
+    .informacion-header h3 {
+        font-size: 16px;
+    }
+    .informacion-header a {
+        font-size: 12px;
+    }
+    .table-auto th,
+    .table-auto td {
+        padding: 8px 10px;
+    }
+}

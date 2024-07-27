@@ -1,0 +1,200 @@
+.section {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    cursor: pointer; 
+}
+
+.section-title ion-icon {
+    margin-right: 8px;
+    font-size: 1.5rem;
+}
+
+.section-content {
+    display: none; 
+}
+
+.input-field {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.formulario-agregar-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.formulario-agregar {
+    width: 100%;
+}
+
+.formulario-agregar form {
+    width: 100%;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+
+.items-center {
+    align-items: center;
+}
+
+.section-container {
+    background-color: #ffffff; 
+    padding: 5px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+}
+
+.formulario-agregar button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 13px;
+    color: #fff;
+    background-color: #247b7b;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin: 5px 0px;
+}
+
+.formulario-agregar button:hover {
+    background: #83c5be;
+}
+
+.add-time-btn {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    font-size: 13px;
+    color: #fff;
+    background-color: #247b7b;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin: 0;
+}
+
+.formulario-agregar input[type="text"],
+.formulario-agregar input[type="email"],
+.formulario-agregar input[type="password"],
+.formulario-agregar input[type="number"],
+.formulario-agregar input[type="time"],
+.formulario-agregar input[type="date"],
+.formulario-agregar select,
+.formulario-agregar textarea {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    font-size: 13px;
+    border-radius: 3px;
+    width: 100%;
+    outline: none;
+    padding: 5px 10px;
+    height: 35px;
+}
+.formulario-agregar textarea{
+    height: 100px;
+}
+.informacion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.informacion-header h3 {
+    color: #333;
+    margin: 0;
+    font-size: 13px;
+}
+
+.informacion-header a {
+    display: flex;
+    align-items: center;
+    background-color: #247b7b;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.informacion-header a ion-icon {
+    margin-right: 8px;
+}
+
+.informacion-header a:hover {
+    background-color: #83c5be;
+}
+
+.formulario-agregar h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.formulario-agregar .add {
+    display: block;
+    width: 20%;
+    padding: 10px;
+    font-size: 13px;
+    color: #fff;
+    background-color: #247b7b;
+    border-radius: 500px;
+    border: none;
+    cursor: pointer;
+    margin: 5px 0px;
+    text-align: center;
+    
+}
+
+.removeButton {
+    display: block ;
+    width: 20%;
+    padding: 10px;
+    font-size: 13px;
+    color: #fff;
+    background-color: #d9534f !important;
+    border-radius: 500px;
+    border: none;
+    cursor: pointer;
+    margin: 5px 0px;
+    text-align: center;
+}
+
+.removeButton:hover {
+    background: #c9302c !important;
+}

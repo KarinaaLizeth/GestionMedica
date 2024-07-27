@@ -1,0 +1,261 @@
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.content-wrapper {
+  display: flex;
+  margin: 20px;
+  gap: 25px; 
+}
+
+#calendar-wrap {
+  max-width: 50%;
+  margin-right: 20px;
+  flex: 2;
+}
+
+#calendar {
+  max-width: 100%;
+  font-size: 13px;
+}
+
+.appointment-list {
+  flex: 1;
+  max-width: 50%;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.appointment-list h3 {
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+.appointment-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.appointment-list th, .appointment-list td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.appointment-list tr {
+  border-radius: 5px;
+}
+
+.appointment-list th {
+  background-color: #247b7b;
+  font-size: 13px;
+  font-weight: 450;
+  color: white;
+  border: none;
+}
+
+.fc .fc-toolbar-title {
+  color: #333;
+}
+
+.fc .fc-button {
+  background-color: #247b7b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.fc .fc-button:hover {
+  background-color: #83c5be;
+}
+
+.fc .fc-button-primary {
+  background-color: #247b7b;
+  color: white;
+}
+
+.fc .fc-button-primary:hover {
+  background-color: #83c5be;
+}
+
+.fc .fc-button-primary:disabled {
+  background-color: #83c5be;
+  color: #000000;
+}
+
+.fc .fc-icon {
+  color: white;
+}
+
+.fc .fc-prev-button, .fc .fc-next-button {
+  background-color: #247b7b;
+  color: white;
+}
+
+.fc .fc-prev-button:hover, .fc .fc-next-button:hover {
+  background-color: #83c5be;
+}
+
+.fc .fc-button-active {
+  background-color: #83c5be !important;
+  color: white !important;
+  border: none !important;
+}
+
+.calendar-header {
+  display: flex;
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+.calendar-header .btn {
+  background-color: #247b7b;
+  color: white;
+  padding: 7px 7px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  margin-top: 15px;
+  font-size: 12px;
+}
+
+.calendar-header .btn:hover {
+  background-color: #83c5be;
+}
+.calendar-header .btn ion-icon {
+  margin-right: 5px;
+  font-size: 1.0em;
+  vertical-align: middle;
+}
+
+.fc-event {
+  background-color: #83c5be;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  padding: 5px;
+  font-size: 12px;
+}
+
+.fc-event:hover {
+  background-color: #247b7b;
+}
+
+/* Estilos para el modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(218, 255, 239, 0.7);
+  padding-top: 60px;
+}
+
+.modal-content {
+  background-color: rgba(255, 255, 255, 0.89);
+  margin: 5% auto;
+  padding: 20px;
+  border: none;
+  width: 60%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+  color: #ff0000;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Estilos para la tabla dentro del modal */
+.modal-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border: 5px;
+}
+
+.modal-content th, .modal-content td {
+  border: none;
+  padding: 10px;
+  text-align: left;
+  font-size: 13px;
+}
+
+.modal-content th {
+  background-color: #247b7b;
+  color: white;
+  font-weight: 600;
+}
+
+.modal-content td {
+  background-color: #fff;
+}
+
+.modal-content tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Estilos para los botones dentro del modal */
+.modal-content .btn {
+  background-color: #247b7b;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  font-size: 12px;
+  margin: 2px;
+}
+
+.modal-content .btn:hover {
+  background-color: #83c5be;
+}
+
+.modal-content .btn-success {
+  background-color: #34c38f;
+}
+
+.modal-content .btn-success:hover {
+  background-color: #2ca67a;
+}
+
+.modal-content .btn-danger {
+  background-color: #f46a6a;
+}
+
+.modal-content .btn-danger:hover {
+  background-color: #cf5a5a;
+}
+
+.modal-content .btn-editar {
+  background-color: #ffe987;
+}
+
+.modal-content .btn-editar:hover {
+  background-color: #e0a800;
+}
+
+.modal-content .btn-consulta {
+  background-color: #17a2b8;
+}
+
+.modal-content .btn-consulta:hover {
+  background-color: #138496;
+}
