@@ -52,6 +52,14 @@ class VentasController extends Controller
             $subtotal = $cantidad * $precio;
             $total += $subtotal;
 
+            // Actualizar la cantidad del servicio
+            $servicio = Servicios::findOrFail($servicioId);
+            if ($servicio->cantidad < $cantidad) {
+                return redirect()->back()->with('error', "No hay suficiente cantidad disponible para el servicio: {$servicio->nombre}");
+            }
+            $servicio->cantidad -= $cantidad;
+            $servicio->save();
+
             VentasServicios::create([
                 'venta_id' => $venta->id,
                 'servicio_id' => $servicioId,

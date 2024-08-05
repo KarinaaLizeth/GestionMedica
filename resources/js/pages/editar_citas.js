@@ -48,6 +48,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    /**
+     * función que muestra los horarios de citas disponibles dentro de un horario específico
+     * rango, excluyendo tiempos reservados, basado en parámetros de entrada.
+     * horaInicio  representa la hora de inicio de la disponibilidad
+     * citas en formato "HH:MM" (formato de 24 horas).
+     *  horaFin  representa la hora de finalización de la disponibilidad de
+     * citas o reservas. Se utiliza en la función mostrarCitasDisponibles para determinar la
+     * rango de franjas horarias dentro de las cuales se pueden programar citas.
+     * duracionCitarepresenta la duración de cada cita
+     * en minutos. Este valor se utiliza para calcular la duración de cada cita en milisegundos.
+     * dentro de la función mostrarCitasDisponibles.
+     *  citasReservadas en mostrarCitasDisponibles
+     * la función es un array que contiene los horarios de las citas reservadas. Esta matriz se utiliza para
+     * comprobar si una franja horaria específica ya está reservada o no, para que solo se muestren las franjas horarias disponibles
+     * se muestran para
+     * fecha  representa la fecha para la cual se desean mostrar las citas
+     *disponibles. Es una cadena que debe tener el formato 'AAAA-MM-DD', por ejemplo '2022-12-31'. Esta
+     * fecha se utiliza para filtrar las citas disponibles en función de la fecha seleccionada.
+     */
+
     function mostrarCitasDisponibles(horaInicio, horaFin, duracionCita, citasReservadas, fecha) {
         const inicio = new Date(`1970-01-01T${horaInicio}Z`);
         const fin = new Date(`1970-01-01T${horaFin}Z`);

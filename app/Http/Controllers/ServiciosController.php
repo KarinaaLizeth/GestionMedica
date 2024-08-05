@@ -87,4 +87,23 @@ class ServiciosController extends Controller
 
         return redirect()->route('servicios.index')->with('success', 'Servicio eliminado.');
     }
+
+    // reducir la cantidad de un servicio
+    public function reducirCantidad($id, $cantidad): RedirectResponse
+    {
+        // buscar el servicio por su id
+        $servicio = Servicios::findOrFail($id);
+
+        // verificar si la cantidad es suficiente
+        if ($servicio->cantidad < $cantidad) {
+            return redirect()->back()->with('error', 'No hay suficiente cantidad disponible.');
+        }
+
+        // reducir la cantidad
+        $servicio->cantidad -= $cantidad;
+        $servicio->save();
+
+        return redirect()->route('servicios.index')->with('success', 'Cantidad actualizada.');
+    }
+
 }

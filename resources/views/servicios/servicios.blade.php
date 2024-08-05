@@ -40,12 +40,14 @@
                 <input type="text" id="table-search-users" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar servicio">
             </div>
         </div>
-        <div class="flex items-center">
-            <a href="{{ route('servicios.crear') }}" class="text-white focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" style="background-color: #247b7b; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#83c5be'"  onmouseout="this.style.backgroundColor='#247b7b'">
-            <ion-icon name="add-circle-outline" style="font-size: 1.3em; vertical-align: middle;" class="mr-1"></ion-icon>    
-            Agregar Servicio
-            </a>
-        </div>
+        @if(Auth::user()->role->nombre === 'Admin' || Auth::user()->role->nombre === 'Doctor')
+            <div class="flex items-center">
+                <a href="{{ route('servicios.crear') }}" class="text-white focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" style="background-color: #247b7b; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#83c5be'"  onmouseout="this.style.backgroundColor='#247b7b'">
+                <ion-icon name="add-circle-outline" style="font-size: 1.3em; vertical-align: middle;" class="mr-1"></ion-icon>    
+                Agregar Servicio
+                </a>
+            </div>
+        @endif
     </div>
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase" style="background-color: #daffef;">
@@ -66,11 +68,13 @@
                 <td class="px-6 py-4">{{ $servicio->cantidad }}</td>
                 <td class="px-6 py-4">
                     <a href="{{ route('servicios.editar', $servicio->id) }}" class=" text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="create-outline"></ion-icon> Editar</a>
-                    <button type="button" class="text-red-600 dark:text-red-500 hover:underline" onclick="confirmDelete({{ $servicio->id }})"><ion-icon name="trash-outline"></ion-icon> Eliminar</button>
-                    <form id="delete-form-{{ $servicio->id }}" action="{{ route('servicios.eliminar', $servicio->id) }}" method="POST" style="display:none">
-                        @csrf
-                        @method('DELETE')
-                    </form>
+                    @if(Auth::user()->role->nombre === 'Admin' || Auth::user()->role->nombre === 'Doctor')
+                        <button type="button" class="text-red-600 dark:text-red-500 hover:underline" onclick="confirmDelete({{ $servicio->id }})"><ion-icon name="trash-outline"></ion-icon> Eliminar</button>
+                        <form id="delete-form-{{ $servicio->id }}" action="{{ route('servicios.eliminar', $servicio->id) }}" method="POST" style="display:none">
+                            @csrf
+                            @method('DELETE')
+                        </form>
+                    @endif
                 </td>
             </tr>
             @endforeach

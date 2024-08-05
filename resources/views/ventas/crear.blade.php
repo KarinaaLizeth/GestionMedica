@@ -10,7 +10,7 @@
             <a href="{{ route('ventas.index') }}"><ion-icon name="arrow-back-outline" class="mr-2"></ion-icon>Inicio</a>
         </div>
         <div class="formulario-agregar">
-            <form method="POST" action="{{ route('ventas.store') }}">
+            <form id="ventaForm" method="POST" action="{{ route('ventas.store') }}">
                 @csrf
                 <div class="section">
                     <h3 class="section-title"><ion-icon name="cart-outline"></ion-icon> Selección de Servicios/Productos</h3>
@@ -29,12 +29,14 @@
                                     <select id="servicio" name="servicio[]" class="input-field servicio-select" required>
                                         <option value="">Seleccione un servicio</option>
                                         @foreach($servicios as $servicio)
-                                            <option value="{{ $servicio->id }}" data-precio="{{ $servicio->precio }}">{{ $servicio->nombre }}</option>
+                                            <option value="{{ $servicio->id }}" data-precio="{{ $servicio->precio }}" data-cantidad="{{ $servicio->cantidad }}" {{ $servicio->cantidad === 0 ? 'disabled' : '' }}>
+                                                {{ $servicio->nombre }} {{ $servicio->cantidad === 0 ? '(No disponible)' : '' }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="number" id="cantidad" name="cantidad[]" class="input-field" value="1" min="1" required/>
+                                    <input type="number" id="cantidad" name="cantidad[]" class="input-field cantidad-input" value="1" min="1" required/>
                                 </td>
                                 <td>
                                     <input type="number" id="precio" name="precio[]" required class="input-field" readonly/>
@@ -56,11 +58,15 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('.servicio-select').addEventListener('change', function(e) {
-        const precioInput = e.target.closest('tr').querySelector('input[name="precio[]"]');
-        const selectedOption = e.target.options[e.target.selectedIndex];
+    function updatePrecio(selectElement) {
+        const precioInput = selectElement.closest('tr').querySelector('input[name="precio[]"]');
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
         const precio = selectedOption.getAttribute('data-precio');
         precioInput.value = precio; 
+    }
+
+    document.querySelector('.servicio-select').addEventListener('change', function(e) {
+        updatePrecio(e.target);
     });
 
     document.getElementById('addservicioButton').addEventListener('click', function() {
@@ -73,12 +79,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 <select name="servicio[]" class="input-field servicio-select" required>
                     <option value="">Seleccione un servicio</option>
                     ${Array.from(originalSelect.options).map(option => `
-                        <option value="${option.value}" data-precio="${option.getAttribute('data-precio')}">${option.text}</option>
+                        <option value="${option.value}" data-precio="${option.getAttribute('data-precio')}" data-cantidad="${option.getAttribute('data-cantidad')}" ${option.getAttribute('data-cantidad') === "0" ? 'disabled' : ''}>
+                            ${option.text} ${option.getAttribute('data-cantidad') === "0" ? '(No disponible)' : ''}
+                        </option>
                     `).join('')}
                 </select>
             </td>
             <td>
-                <input type="number" name="cantidad[]" value="1" class="input-field" min="1" required/>
+                <input type="number" name="cantidad[]" value="1" class="input-field cantidad-input" min="1" required/>
             </td>
             <td>
                 <input type="number" name="precio[]" required class="input-field" readonly/>
@@ -90,10 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
         container.appendChild(newRow);
 
         newRow.querySelector('.servicio-select').addEventListener('change', function(e) {
-            const precioInput = e.target.closest('tr').querySelector('input[name="precio[]"]');
-            const selectedOption = e.target.options[e.target.selectedIndex];
-            const precio = selectedOption.getAttribute('data-precio');
-            precioInput.value = precio;
+            updatePrecio(e.target);
         });
     });
 
@@ -102,6 +107,41 @@ document.addEventListener('DOMContentLoaded', function() {
             e.target.closest('tr').remove();
         }
     });
+
+    document.getElementById('ventaForm').addEventListener('submit', function(e) {
+        const cantidadInputs = document.querySelectorAll('.cantidad-input');
+        for (const cantidadInput of cantidadInputs) {
+            const tr = cantidadInput.closest('tr');
+            const selectElement = tr.querySelector('.servicio-select');
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const cantidadDisponible = parseInt(selectedOption.getAttribute('data-cantidad'), 10);
+            const cantidadSeleccionada = parseInt(cantidadInput.value, 10);
+
+            if (cantidadSeleccionada > cantidadDisponible) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Cantidad Insuficiente',
+                    text: `Solo hay ${cantidadDisponible} unidades disponibles para el servicio: ${selectedOption.text}`
+                });
+                return false;
+            }
+        }
+    });
 });
 </script>
+
+@if ($errors->any())
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'error',
+            title: 'Errores de Validación',
+            html: '<ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
+            confirmButtonText: 'Aceptar'
+        });
+    });
+</script>
+@endif
+
 @endpush

@@ -18,7 +18,6 @@ class Roles
 
         $user = Auth::user();
         \Log::info('Usuario autenticado', ['user' => $user, 'role' => $user->role]);
-
         return $next($request);
     }
 }

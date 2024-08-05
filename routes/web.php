@@ -142,6 +142,7 @@ Route::middleware([Roles::class . ':doctor'])->group(function () {
     Route::get('/servicios/{servicio}/editar', [ServiciosController::class, 'editar'])->name('servicios.editar');
     Route::put('/servicios/{servicio}', [ServiciosController::class, 'actualizar'])->name('servicios.actualizar');
     Route::delete('/servicios/{servicio}', [ServiciosController::class, 'eliminar'])->name('servicios.eliminar');
+    Route::post('/servicios/{id}/reducir/{cantidad}', [ServiciosController::class, 'reducirCantidad'])->name('servicios.reducir');
 
     // Rutas para secretarias
     Route::get('/secretarias', [SecretariasController::class, 'index'])->name('secretarias.index');
@@ -216,7 +217,7 @@ Route::middleware([Roles::class . ':secretaria'])->group(function () {
     Route::get('/servicios/{servicio}/editar', [ServiciosController::class, 'editar'])->name('servicios.editar');
     Route::put('/servicios/{servicio}', [ServiciosController::class, 'actualizar'])->name('servicios.actualizar');
     Route::delete('/servicios/{servicio}', [ServiciosController::class, 'eliminar'])->name('servicios.eliminar');
-
+    Route::post('/servicios/{id}/reducir/{cantidad}', [ServiciosController::class, 'reducirCantidad'])->name('servicios.reducir');
     // Rutas para secretarias
     Route::get('/secretarias', [SecretariasController::class, 'index'])->name('secretarias.index');
     Route::get('/secretarias/crear', [SecretariasController::class, 'crear'])->name('secretarias.crear');
@@ -260,6 +261,7 @@ Route::middleware([Roles::class . ':secretaria'])->group(function () {
         return view('welcome');
     })->name('logout');
 });
+
 Route::middleware([Roles::class . ':admin'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -294,7 +296,8 @@ Route::middleware([Roles::class . ':admin'])->group(function () {
     Route::get('/servicios/{servicio}/editar', [ServiciosController::class, 'editar'])->name('servicios.editar');
     Route::put('/servicios/{servicio}', [ServiciosController::class, 'actualizar'])->name('servicios.actualizar');
     Route::delete('/servicios/{servicio}', [ServiciosController::class, 'eliminar'])->name('servicios.eliminar');
-
+    Route::post('/servicios/{id}/reducir/{cantidad}', [ServiciosController::class, 'reducirCantidad'])->name('servicios.reducir');
+   
     // Rutas para secretarias
     Route::get('/secretarias', [SecretariasController::class, 'index'])->name('secretarias.index');
     Route::get('/secretarias/crear', [SecretariasController::class, 'crear'])->name('secretarias.crear');

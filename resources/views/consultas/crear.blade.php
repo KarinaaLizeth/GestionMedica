@@ -12,7 +12,7 @@
         </div>
         <div class="formulario-agregar">
             <h3>Consulta</h3>
-            <form method="POST" action="{{ route('consultas.store') }}">
+            <form id="consultaForm" method="POST" action="{{ route('consultas.store') }}">
                 @csrf
                 <input type="hidden" name="paciente_id" value="{{ $paciente->id ?? '' }}">
                 <input type="hidden" name="doctor_id" value="{{ $doctor->id ?? '' }}">
@@ -140,10 +140,12 @@
                             <div class="servicios-field-group flex w-full gap-4">
                                 <div class="flex-1">
                                     <label for="servicio">Servicio</label>
-                                    <select id="servicio" name="servicio[]" class="input-field servicio-select" required>
+                                    <select id="servicio" name="servicio[]" class="input-field servicio-select">
                                         <option value="">Seleccione un servicio</option>
                                         @foreach($servicios as $servicio)
-                                            <option value="{{ $servicio->id }}" data-precio="{{ $servicio->precio }}">{{ $servicio->nombre }}</option>
+                                            <option value="{{ $servicio->id }}" data-precio="{{ $servicio->precio }}" data-cantidad="{{ $servicio->cantidad }}" {{ !is_null($servicio->cantidad) && $servicio->cantidad === 0 ? 'disabled' : '' }}>
+                                                {{ $servicio->nombre }} {{ !is_null($servicio->cantidad) && $servicio->cantidad === 0 ? '(No disponible)' : '' }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -153,7 +155,7 @@
                                 </div>
                                 <div class="flex-1">
                                     <label for="precio">Precio</label>
-                                    <input type="number" id="precio" name="precio[]" required class="input-field" readonly/>
+                                    <input type="number" id="precio" name="precio[]" class="input-field" readonly/>
                                 </div>
                                 <div class="flex-1 flex items-center">
                                     <button type="button" id="addServicioButton" class="add"><ion-icon name="add-outline"></ion-icon></button>
@@ -164,12 +166,13 @@
                     </div>
                 </div>
 
+
+
                 <button type="submit" class="btn">Terminar Consulta</button>
             </form>
         </div>
     </div>
 </div>
-
 
 @if ($errors->any())
 <script>
@@ -185,3 +188,83 @@
 @endif
 
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function updatePrecio(selectElement) {
+        const precioInput = selectElement.closest('div').nextElementSibling.querySelector('input[name="precio[]"]');
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const precio = selectedOption.getAttribute('data-precio');
+        precioInput.value = precio;
+    }
+
+    document.querySelector('.servicio-select').addEventListener('change', function(e) {
+        updatePrecio(e.target);
+    });
+
+    document.getElementById('addServicioButton').addEventListener('click', function() {
+        const container = document.getElementById('servicios-fields-container');
+        const originalSelect = document.querySelector('.servicio-select');
+        const newRow = document.createElement('div');
+        newRow.classList.add('servicios-field-group', 'flex', 'w-full', 'gap-4');
+        newRow.innerHTML = `
+            <div class="flex-1">
+                <label for="servicio">Servicio</label>
+                <select name="servicio[]" class="input-field servicio-select">
+                    <option value="">Seleccione un servicio</option>
+                    ${Array.from(originalSelect.options).map(option => `
+                        <option value="${option.value}" data-precio="${option.getAttribute('data-precio')}" data-cantidad="${option.getAttribute('data-cantidad')}" ${option.getAttribute('data-cantidad') === "0" ? 'disabled' : ''}>
+                            ${option.text} ${option.getAttribute('data-cantidad') === "0" ? '(No disponible)' : ''}
+                        </option>
+                    `).join('')}
+                </select>
+            </div>
+            <div class="flex-1">
+                <label for="cantidad_servicio">Cantidad</label>
+                <input type="number" name="cantidad_servicio[]" value="1" class="input-field"/>
+            </div>
+            <div class="flex-1">
+                <label for="precio">Precio</label>
+                <input type="number" name="precio[]" class="input-field" readonly/>
+            </div>
+            <div class="flex-1 flex items-center">
+                <button type="button" class="removeButton add"><ion-icon name="trash-outline"></ion-icon></button>
+            </div>
+        `;
+        container.appendChild(newRow);
+
+        newRow.querySelector('.servicio-select').addEventListener('change', function(e) {
+            updatePrecio(e.target);
+        });
+    });
+
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.matches('ion-icon[name="trash-outline"]')) {
+            e.target.closest('.servicios-field-group').remove();
+        }
+    });
+
+    document.getElementById('consultaForm').addEventListener('submit', function(e) {
+        const cantidadInputs = document.querySelectorAll('input[name="cantidad_servicio[]"]');
+        for (const cantidadInput of cantidadInputs) {
+            const div = cantidadInput.closest('.servicios-field-group');
+            const selectElement = div.querySelector('.servicio-select');
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const cantidadDisponible = parseInt(selectedOption.getAttribute('data-cantidad'), 10);
+            const cantidadSeleccionada = parseInt(cantidadInput.value, 10);
+
+            if (cantidadSeleccionada > cantidadDisponible) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Cantidad Insuficiente',
+                    text: `Solo hay ${cantidadDisponible} unidades disponibles para el servicio: ${selectedOption.text}`
+                });
+                return false;
+            }
+        }
+    });
+});
+</script>
+@endpush

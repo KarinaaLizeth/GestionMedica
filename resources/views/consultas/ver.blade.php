@@ -41,11 +41,11 @@
             <div class="info-header">
                 <div class="info-section">
                     <h4><strong>Motivo de la Consulta</strong></h4>
-                    <p>{{ $consulta->motivo_consulta }}</p>
+                    <p>{!! nl2br(e($consulta->motivo_consulta)) !!}</p>
                 </div>
                 <div class="info-section">
                     <h4><strong>Notas de Padecimiento</strong></h4>
-                    <p>{{ $consulta->notas_padecimiento }}</p>
+                    <p>{!! nl2br(e($consulta->notas_padecimiento)) !!}</p>
                 </div>
             </div>
             <div class="signos-vitales">
@@ -120,37 +120,36 @@
                 </div>
             </div>
 
-        <div class="servicios">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Notas Receta</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($consulta->recetas as $receta)
-                    <tr>
-                        <td>{{ $receta->notas_receta }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Notas Servicios/Productos</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($consulta->serviciosConsulta as $servicio)
-                    <tr>
-                        <td>{{ $servicio->notas_servicio }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>  
-
+            <div class="servicios">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Notas Receta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($consulta->recetas as $receta)
+                        <tr>
+                            <td>{{ $receta->notas_receta }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Notas Servicios/Productos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($consulta->serviciosConsulta as $servicio)
+                        <tr>
+                            <td>{{ $servicio->notas_servicio }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>  
             
             <div class="info-header">
                 <div class="info-section">

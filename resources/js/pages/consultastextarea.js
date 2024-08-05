@@ -5,16 +5,29 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 document.addEventListener('DOMContentLoaded', function() {
     // inicializa CKEditor en el campo 'notas_padecimiento'
     ClassicEditor
-        .create(document.querySelector('#notas_padecimiento'))
+        .create(document.querySelector('#notas_padecimiento'), {
+            enterMode: 'paragraph',
+            removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed'],
+            toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'undo', 'redo']
+        })
+        .then(editor => {
+            window.editorNotasPadecimiento = editor;
+        })
         .catch(error => {
-            console.error(error); // muestra errores en la consola si los hay
+            console.error(error);
         });
 
-    // inicializa CKEditor en el campo 'motivo_consulta'
     ClassicEditor
-        .create(document.querySelector('#motivo_consulta'))
+        .create(document.querySelector('#motivo_consulta'), {
+            enterMode: 'paragraph',
+            removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed'],
+            toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'undo', 'redo']
+        })
+        .then(editor => {
+            window.editorMotivoConsulta = editor;
+        })
         .catch(error => {
-            console.error(error); // muestra errores en la consola si los hay
+            console.error(error);
         });
 
     // oculta inicialmente todo el contenido de las secciones

@@ -66,11 +66,13 @@
                 <td class="px-6 py-4">{{ $secretaria->telefono }}</td>
                 <td class="px-6 py-4">
                     <a href="{{ route('secretarias.editar', $secretaria->id) }}" class="text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="create-outline"></ion-icon> Editar</a>
-                    <form action="{{ route('secretarias.eliminar', $secretaria->id) }}" method="POST" class="d-inline-block form-eliminar">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button" class="text-red-600 dark:text-red-500 hover:underline btn-eliminar"><ion-icon name="trash-outline"></ion-icon> Eliminar</button>
-                    </form>
+                    @if(Auth::user()->role->nombre === 'Admin' || Auth::user()->role->nombre === 'Doctor')
+                        <form action="{{ route('secretarias.eliminar', $secretaria->id) }}" method="POST" class="d-inline-block form-eliminar">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="text-red-600 dark:text-red-500 hover:underline btn-eliminar"><ion-icon name="trash-outline"></ion-icon> Eliminar</button>
+                        </form>
+                    @endif
                 </td>
             </tr>
             @endforeach

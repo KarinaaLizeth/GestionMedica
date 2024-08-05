@@ -296,6 +296,7 @@ class CitasController extends Controller
     
         return response()->json($eventos);
     }
+    
     //obtener las citas de una fecha especifica
     public function getCitasPorDia(Request $request)
     {

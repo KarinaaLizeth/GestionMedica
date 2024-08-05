@@ -65,6 +65,7 @@ class ConsultasController extends Controller
 
         return view('consultas.crear', compact('servicios', 'paciente', 'doctor', 'fecha', 'hora','cita'));
     }
+    
 
     //validar y guardar nueva consulta
     public function store(Request $request)
@@ -84,94 +85,130 @@ class ConsultasController extends Controller
             'frecuencia_medicamento' => 'required|array',
             'duracion_medicamento' => 'required|array',
             'notas_receta' => 'nullable|string',
-            'servicio' => 'required|array',
-            'cantidad_servicio' => 'required|array',
-            'precio' => 'required|array',
+            'servicio' => 'nullable|array',
+            'cantidad_servicio' => 'nullable|array',
+            'precio' => 'nullable|array',
             'notas_servicio' => 'nullable|string'
         ]);
     
-        // Crear la consulta
-        $consulta = Consultas::create([
-            'paciente_id' => $request->paciente_id,
-            'doctor_id' => $request->doctor_id,
-            'cita_id' => $request->input('cita_id'),
-            'motivo_consulta' => $request->motivo_consulta,
-            'notas_padecimiento' => $request->notas_padecimiento,
-           
-        ]);
+        try {
+            // Verificar la cantidad disponible de cada servicio antes de crear la consulta
+            if ($request->has('servicio') && !empty(array_filter($request->servicio))) {
+                foreach ($request->servicio as $index => $servicioId) {
+                    if (empty($servicioId)) {
+                        continue; // Saltar servicios vacíos
+                    }
     
-        // Crear los signos vitales
-        SignosVitales::create([
-            'consulta_id' => $consulta->id,
-            'temperatura' => $request->temperatura,
-            'talla' => $request->talla,
-            'frecuencia_cardiaca' => $request->frecuencia_cardiaca,
-            'saturacion_oxigeno' => $request->saturacion_oxigeno,
-        ]);
-    
-        // Crear las recetas
-        foreach ($request->medicacion as $index => $medicacion) {
-            Receta::create([
-                'consulta_id' => $consulta->id,
-                'medicacion' => $medicacion,
-                'cantidad_medicamento' => $request->cantidad_medicamento[$index],
-                'frecuencia_medicamento' => $request->frecuencia_medicamento[$index],
-                'duracion_medicamento' => $request->duracion_medicamento[$index],
-                'notas_receta' => $request->notas_receta,
-            ]);
-        }
-    
-        // Inicializar el total de la venta
-        $total = 0;
-
-        // Crear los servicios de consulta y calcular el total de la venta
-        foreach ($request->servicio as $index => $servicioId) {
-            $cantidad = $request->cantidad_servicio[$index];
-            $precio = $request->precio[$index];
-            $subtotal = $cantidad * $precio;
-            $total += $subtotal;
-
-            ServiciosConsulta::create([
-                'consulta_id' => $consulta->id,
-                'servicio_id' => $servicioId,
-                'cantidad_servicio' => $cantidad,
-                'precio' => $precio,
-                'notas_servicio' => $request->notas_servicio[$index],
-            ]);
-        }
-
-        // Crear la venta
-        $venta = Venta::create([
-            'total' => $total,
-            'consulta_id' => $consulta->id,  // asignar la venta a la consulta
-        ]);
-
-        // Guardar los detalles de los servicios en la tabla ventas_servicios
-        foreach ($request->servicio as $index => $servicioId) {
-            $cantidad = $request->cantidad_servicio[$index];
-            $precio = $request->precio[$index];
-            $subtotal = $cantidad * $precio;
-
-            VentasServicios::create([
-                'venta_id' => $venta->id,
-                'servicio_id' => $servicioId,
-                'cantidad' => $cantidad,
-                'precio' => $precio,
-                'subtotal' => $subtotal,
-            ]);
-        }
-    
-        // Marcar la cita como completada (si existe)
-        if ($request->has('cita_id')) {
-            $cita = Citas::find($request->cita_id);
-            if ($cita) {
-                $cita->update(['estado' => 'completada']);
+                    $servicio = Servicios::findOrFail($servicioId);
+                    $cantidadSolicitada = $request->cantidad_servicio[$index];
+                    if (!is_null($servicio->cantidad) && $servicio->cantidad < $cantidadSolicitada) {
+                        return redirect()->back()->withErrors(["No hay suficiente cantidad disponible para el servicio: {$servicio->nombre}"]);
+                    }
+                }
             }
-        }
 
+             // Crear la consulta
+            $consulta = Consultas::create([
+                'paciente_id' => $request->paciente_id,
+                'doctor_id' => $request->doctor_id,
+                'cita_id' => $request->input('cita_id'),
+                'motivo_consulta' => preg_replace('/<p>(.*?)<\/p>/', '$1', $request->motivo_consulta),
+                'notas_padecimiento' => preg_replace('/<p>(.*?)<\/p>/', '$1', $request->notas_padecimiento),
+            ]);
     
-        return redirect()->route('consultas.index')->with('success', 'Consulta y venta registradas correctamente.');
+            // Crear los signos vitales
+            SignosVitales::create([
+                'consulta_id' => $consulta->id,
+                'temperatura' => $request->temperatura,
+                'talla' => $request->talla,
+                'frecuencia_cardiaca' => $request->frecuencia_cardiaca,
+                'saturacion_oxigeno' => $request->saturacion_oxigeno,
+            ]);
+    
+            // Crear las recetas
+            foreach ($request->medicacion as $index => $medicacion) {
+                Receta::create([
+                    'consulta_id' => $consulta->id,
+                    'medicacion' => $medicacion,
+                    'cantidad_medicamento' => $request->cantidad_medicamento[$index],
+                    'frecuencia_medicamento' => $request->frecuencia_medicamento[$index],
+                    'duracion_medicamento' => $request->duracion_medicamento[$index],
+                    'notas_receta' => $request->notas_receta,
+                ]);
+            }
+    
+            // Inicializar el total de la venta
+            $total = 0;
+    
+            // Crear los servicios de consulta y calcular el total de la venta
+            if ($request->has('servicio') && !empty(array_filter($request->servicio))) {
+                foreach ($request->servicio as $index => $servicioId) {
+                    if (empty($servicioId)) {
+                        continue; // Saltar servicios vacíos
+                    }
+    
+                    $servicio = Servicios::findOrFail($servicioId);
+                    $cantidad = $request->cantidad_servicio[$index];
+                    $precio = $request->precio[$index];
+                    $subtotal = $cantidad * $precio;
+                    $total += $subtotal;
+    
+                    if (!is_null($servicio->cantidad)) {
+                        $servicio->cantidad -= $cantidad;
+                        $servicio->save();
+                    }
+    
+                    ServiciosConsulta::create([
+                        'consulta_id' => $consulta->id,
+                        'servicio_id' => $servicioId,
+                        'cantidad_servicio' => $cantidad,
+                        'precio' => $precio,
+                        'notas_servicio' => $request->notas_servicio[$index] ?? '',
+                    ]);
+                }
+    
+                // Crear la venta si hay servicios
+                $venta = Venta::create([
+                    'total' => $total,
+                    'consulta_id' => $consulta->id,  // asignar la venta a la consulta
+                ]);
+    
+                // Guardar los detalles de los servicios en la tabla ventas_servicios
+                foreach ($request->servicio as $index => $servicioId) {
+                    if (empty($servicioId)) {
+                        continue; // Saltar servicios vacíos
+                    }
+    
+                    $cantidad = $request->cantidad_servicio[$index];
+                    $precio = $request->precio[$index];
+                    $subtotal = $cantidad * $precio;
+    
+                    VentasServicios::create([
+                        'venta_id' => $venta->id,
+                        'servicio_id' => $servicioId,
+                        'cantidad' => $cantidad,
+                        'precio' => $precio,
+                        'subtotal' => $subtotal,
+                    ]);
+                }
+            }
+    
+            // Marcar la cita como completada (si existe)
+            if ($request->has('cita_id')) {
+                $cita = Citas::find($request->cita_id);
+                if ($cita) {
+                    $cita->update(['estado' => 'completada']);
+                }
+            }
+    
+            return redirect()->route('consultas.index')->with('success', 'Consulta y venta registradas correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors([$e->getMessage()]);
+        }
     }
+    
+    
+    
     public function completar($id)
     {
         $consulta = Consultas::findOrFail($id);
@@ -265,13 +302,11 @@ class ConsultasController extends Controller
     public function ver($id)
     {
         $consulta = Consultas::with(['paciente', 'doctor', 'signosVitales', 'recetas', 'serviciosConsulta', 'venta.servicios'])->findOrFail($id);
-        $cita = Citas::where('paciente_id', $consulta->paciente_id)
-                     ->where('doctor_id', $consulta->doctor_id)
-                     ->where('estado', '!=', 'Cancelada')
-                     ->first();
+        $cita = Citas::find($consulta->cita_id);
         
         return view('consultas.ver', compact('consulta', 'cita'));
     }
+    
 
 
 

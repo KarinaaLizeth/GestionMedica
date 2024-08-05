@@ -35,18 +35,16 @@
         @endphp
 
         @if($userRole === 'doctor')
-            @include('layouts.navigarion_doctor')
+            @include('layouts.navigation')
         @elseif($userRole === 'secretaria')
             @include('layouts.navigation_secretaria')
         @elseif($userRole === 'admin')
             @include('layouts.navigation')
         @else
-            @include('layouts.navigation')
+            @include('layouts.ventana')
         @endif
     @endauth
-    @guest
-        @include('layouts.navigation')
-    @endguest
+
 
         <!-- Page Heading -->
         @isset($header)

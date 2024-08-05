@@ -16,6 +16,15 @@ class VentasServicios extends Model
     'precio',
     'subtotal'];
 
+    public function venta()
+    {
+        return $this->belongsTo(Venta::class);
+    }
+
+    public function servicio()
+    {
+        return $this->belongsTo(Servicios::class);
+    }
 
 
 }

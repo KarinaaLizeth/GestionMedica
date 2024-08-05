@@ -76,11 +76,13 @@
                 <td class="px-6 py-4">{{ $doctor->precio_consulta }}</td>
                 <td class="px-6 py-4">
                     <a href="{{ route('doctores.editar', $doctor->id) }}" class=" text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="create-outline"></ion-icon> Editar</a>
-                    <button type="button" class=" text-red-600 dark:text-red-500 hover:underline" onclick="confirmDelete({{ $doctor->id }})"><ion-icon name="trash-outline"></ion-icon> Eliminar</button>
-                    <form id="delete-form-{{ $doctor->id }}" action="{{ route('doctores.eliminar', $doctor->id) }}" method="POST" style="display: none;">
-                        @csrf
-                        @method('DELETE')
-                    </form>
+                    @if(Auth::user()->role->nombre === 'Admin' || Auth::user()->role->nombre === 'Doctor')
+                        <button type="button" class=" text-red-600 dark:text-red-500 hover:underline" onclick="confirmDelete({{ $doctor->id }})"><ion-icon name="trash-outline"></ion-icon> Eliminar</button>
+                        <form id="delete-form-{{ $doctor->id }}" action="{{ route('doctores.eliminar', $doctor->id) }}" method="POST" style="display: none;">
+                            @csrf
+                            @method('DELETE')
+                        </form>
+                    @endif
                 </td>
             </tr>
             @endforeach
