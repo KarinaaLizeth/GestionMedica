@@ -1,4 +1,11 @@
 <link rel="stylesheet" href="{{ asset('css/nav.css') }}">
+<div class="bienvenido-container">
+    <div class="bienvenido">                          
+        @if (strtolower(Auth::user()->role->nombre) === 'doctor')
+            <span>Bienvenida Doctor</span>
+        @endif
+    </div>
+</div>
 <nav x-data="{ open: false }" class="navbar from-blue-500 via-blue-600 to-blue-700 text-black shadow-lg">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -10,12 +17,6 @@
                         <x-application-logo class="block h-9 w-auto fill-current text-black" />
                     </a>
                 </div>
-                <div>
-                    @if (strtolower(Auth::user()->role->nombre) === 'doctor')
-                        <span class="text-green-600">Bienvenido Doctor</span>
-                    @endif
-                </div>
-
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-black ">

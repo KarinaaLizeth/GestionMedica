@@ -1,4 +1,9 @@
 <link rel="stylesheet" href="{{ asset('css/nav.css') }}">
+<div class="bienvenido-container">
+    <div class="bienvenido">         
+        <span>Bienvenida Doctor</span>
+    </div>
+</div>
 <nav x-data="{ open: false }" class="navbar from-blue-500 via-blue-600 to-blue-700 text-black shadow-lg">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
