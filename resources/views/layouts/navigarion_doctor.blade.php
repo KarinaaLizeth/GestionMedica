@@ -1,12 +1,10 @@
 <link rel="stylesheet" href="{{ asset('css/nav.css') }}">
 <div class="bienvenido-container">
-    <div class="bienvenido">                          
-        @if (strtolower(Auth::user()->role->nombre) === 'doctor')
-            <span>Bienvenida Doctor</span>
-        @endif
+    <div class="bienvenido">         
+        <span>Bienvenida Doctor</span>
     </div>
 </div>
-<nav x-data="{ open: false }" class="navbar from-blue-500 via-blue-600 to-blue-700 text-black shadow-lg">
+<nav x-data="{ open: false }" class="navbar shadow-lg">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -17,40 +15,77 @@
                         <x-application-logo class="block h-9 w-auto fill-current text-black" />
                     </a>
                 </div>
+
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-black ">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('doctores.index')" :active="request()->routeIs('doctores.index')" class="text-black">
+                    <x-nav-link :href="route('doctores.index')" :active="request()->routeIs('doctores.index')" class="text-black active-nav-link">
                         {{ __('Doctores') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('secretarias.index')" :active="request()->routeIs('secretarias.index')" class="text-black">
+                    <x-nav-link :href="route('secretarias.index')" :active="request()->routeIs('secretarias.index')" class="text-black active-nav-link">
                         {{ __('Secretarias') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('pacientes.index')" :active="request()->routeIs('pacientes.index')" class="text-black">
+                    <x-nav-link :href="route('pacientes.index')" :active="request()->routeIs('pacientes.index')" class="text-black active-nav-link">
                         {{ __('Pacientes') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('servicios.index')" :active="request()->routeIs('servicios.index')" class="text-black">
+                    <x-nav-link :href="route('servicios.index')" :active="request()->routeIs('servicios.index')" class="text-black active-nav-link">
                         {{ __('Servicios') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('citas.index')" :active="request()->routeIs('citas.index')" class="text-black">
+                    <x-nav-link :href="route('citas.index')" :active="request()->routeIs('citas.index')" class="text-black active-nav-link">
                         {{ __('Citas') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('consultas.lista')" :active="request()->routeIs('consultas.index')" class="text-black">
+                    <x-nav-link :href="route('consultas.lista')" :active="request()->routeIs('consultas.index')" class="text-black active-nav-link">
                         {{ __('Consultas') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('ventas.index')" :active="request()->routeIs('ventas.index')" class="text-black">
+                    <x-nav-link :href="route('rol.index')" :active="request()->routeIs('rol.index')" class="text-black active-nav-link">
+                        {{ __('Roles') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('doctores.lista')" :active="request()->routeIs('doctores.index')" class="text-black active-nav-link">
+                        {{ __('Lista Doctores') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('ventas.index')" :active="request()->routeIs('ventas.index')" class="text-black active-nav-link">
                         {{ __('Ventas') }}
                     </x-nav-link>
-                </div>
-            </div>
+                    @php
+                        $notificaciones = App\Models\Notificacion::where('user_id', auth()->id())->where('leido', false)->get();
+                    @endphp
+
+                    <!-- Icono de la campana con contador de notificaciones -->
+                    <div class="relative flex items-center ml-8" x-data="{ open: false }" @click.away="open = false" @open-dropdown.window="markNotificationsAsRead">
+                        <x-nav-link @click="open = !open" class="text-black active-nav-link relative cursor-pointer">
+                            <ion-icon name="notifications-outline" style="font-size: 24px;"></ion-icon>
+                            @if($notificaciones->count() > 0)
+                                <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none rounded-full" style="background-color: #cf5a5a; color: white;">
+                                    {{ $notificaciones->count() }}
+                                </span>
+                            @endif
+                        </x-nav-link>
+
+                        <!-- Desplegable de notificaciones -->
+                        <div x-show="open" class="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg overflow-auto max-h-64 z-50">
+                            <ul class="divide-y divide-gray-200">
+                                @forelse($notificaciones as $notificacion)
+                                    <li class="p-2 hover:bg-gray-100">
+                                        <a href="{{ route('solicitudes.index') }}" onclick="markAsRead({{ $notificacion->id }})" class="text-sm text-gray-700 hover:no-underline">
+                                            {{ $notificacion->mensaje }}
+                                        </a>
+                                    </li>
+                                @empty
+                                    <li class="p-2 text-sm text-gray-500">
+                                        No hay nuevas notificaciones
+                                    </li>
+                                @endforelse
+                            </ul>
+                        </div>
+                    </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blackfocus:outline-none transition ease-in-out duration-150" style="background-color: #83c5be !important; coloblack!important;" onmouseout="this.style.backgroundColor='#83c5be'">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blackfocus:outline-none transition ease-in-out duration-150" style="background-color: #83c5be !important; coloblack!important; margin-left: 50px;" onmouseout="this.style.backgroundColor='#83c5be'">
                             <div>
                                 {{ Auth::user()->name }}
                             </div>
@@ -63,15 +98,11 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')" class="text-black hover:bg-gray-100">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <x-dropdown-link :href="route('logout')" class="text-black hover:bg-gray-100" onclick="event.preventDefault(); this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Cerrar Sesión') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -131,3 +162,28 @@
     </div>
 </nav>
 
+<script>
+    function markNotificationsAsRead() {
+        fetch('{{ route('notificaciones.leer') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            },
+        }).then(response => {
+            if (response.ok) {
+                // Ocultar el contador o disminuir su valor
+                let notificationCountElement = document.getElementById('notification-count');
+                if (notificationCountElement) {
+                    let currentCount = parseInt(notificationCountElement.textContent);
+                    if (currentCount > 0) {
+                        notificationCountElement.textContent = currentCount - 1;
+                    }
+                    if (currentCount - 1 <= 0) {
+                        notificationCountElement.style.display = 'none';
+                    }
+                }
+            }
+        });
+    }
+</script>

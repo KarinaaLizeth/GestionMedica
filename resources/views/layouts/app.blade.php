@@ -35,7 +35,7 @@
         @endphp
 
         @if($userRole === 'doctor')
-            @include('layouts.navigation')
+            @include('layouts.navigarion_doctor')
         @elseif($userRole === 'secretaria')
             @include('layouts.navigation_secretaria')
         @elseif($userRole === 'admin')
@@ -57,7 +57,11 @@
 
         <!-- Page Content -->
         <main>
-            @yield('content')
+            @isset($slot)
+                {{ $slot }}
+            @else
+                @yield('content')
+            @endisset
         </main>
     </div>
 

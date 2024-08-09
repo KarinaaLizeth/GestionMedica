@@ -1,10 +1,10 @@
 <link rel="stylesheet" href="{{ asset('css/nav.css') }}">
 <div class="bienvenido-container">
     <div class="bienvenido">         
-        <span>Bienvenida Doctor</span>
+        <span>Bienvenida Admin</span>
     </div>
 </div>
-<nav x-data="{ open: false }" class="navbar from-blue-500 via-blue-600 to-blue-700 text-black shadow-lg">
+<nav x-data="{ open: false }" class="navbar shadow-lg">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -18,36 +18,68 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-black ">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('doctores.index')" :active="request()->routeIs('doctores.index')" class="text-black">
+                    <x-nav-link :href="route('doctores.index')" :active="request()->routeIs('doctores.index')" class="text-black active-nav-link">
                         {{ __('Doctores') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('secretarias.index')" :active="request()->routeIs('secretarias.index')" class="text-black">
+                    <x-nav-link :href="route('secretarias.index')" :active="request()->routeIs('secretarias.index')" class="text-black active-nav-link">
                         {{ __('Secretarias') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('pacientes.index')" :active="request()->routeIs('pacientes.index')" class="text-black">
+                    <x-nav-link :href="route('pacientes.index')" :active="request()->routeIs('pacientes.index')" class="text-black active-nav-link">
                         {{ __('Pacientes') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('servicios.index')" :active="request()->routeIs('servicios.index')" class="text-black">
+                    <x-nav-link :href="route('servicios.index')" :active="request()->routeIs('servicios.index')" class="text-black active-nav-link">
                         {{ __('Servicios') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('citas.index')" :active="request()->routeIs('citas.index')" class="text-black">
+                    <x-nav-link :href="route('citas.index')" :active="request()->routeIs('citas.index')" class="text-black active-nav-link">
                         {{ __('Citas') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('consultas.lista')" :active="request()->routeIs('consultas.index')" class="text-black">
+                    <x-nav-link :href="route('consultas.lista')" :active="request()->routeIs('consultas.index')" class="text-black active-nav-link">
                         {{ __('Consultas') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('rol.index')" :active="request()->routeIs('rol.index')" class="text-black">
+                    <x-nav-link :href="route('rol.index')" :active="request()->routeIs('rol.index')" class="text-black active-nav-link">
                         {{ __('Roles') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('doctores.lista')" :active="request()->routeIs('doctores.index')" class="text-black">
+                    <x-nav-link :href="route('doctores.lista')" :active="request()->routeIs('doctores.index')" class="text-black active-nav-link">
                         {{ __('Lista Doctores') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('ventas.index')" :active="request()->routeIs('ventas.index')" class="text-black">
+                    <x-nav-link :href="route('ventas.index')" :active="request()->routeIs('ventas.index')" class="text-black active-nav-link">
                         {{ __('Ventas') }}
                     </x-nav-link>
+                    @php
+                        $notificaciones = App\Models\Notificacion::where('user_id', auth()->id())->where('leido', false)->get();
+                    @endphp
+
+                    <!-- Icono de la campana con contador de notificaciones -->
+                    <div class="relative flex items-center ml-8">
+                    <x-nav-link @click="open = !open" class="text-black active-nav-link relative cursor-pointer">
+                        <ion-icon name="notifications-outline" style="font-size: 24px;"></ion-icon>
+                        @if($notificaciones->count() > 0)
+                            <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none rounded-full" style="background-color: #cf5a5a; color: white;">
+                            {{ $notificaciones->count() }}
+                            </span>
+                        @endif
+                    </x-nav-link>
+
+                        <!-- Desplegable de notificaciones -->
+                        <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg overflow-hidden z-50">
+                            <ul class="divide-y divide-gray-200">
+                                @forelse($notificaciones as $notificacion)
+                                    <li class="p-2 hover:bg-gray-100">
+                                        <a href="{{ route('solicitudes.index') }}" onclick="markAsRead({{ $notificacion->id }})" class="text-sm text-gray-700 hover:no-underline">
+                                            {{ $notificacion->mensaje }}
+                                        </a>
+                                    </li>
+                                @empty
+                                    <li class="p-2 text-sm text-gray-500">
+                                        No hay nuevas notificaciones
+                                    </li>
+                                @endforelse
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -55,7 +87,7 @@
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blackfocus:outline-none transition ease-in-out duration-150" style="background-color: #83c5be !important; coloblack!important;" onmouseout="this.style.backgroundColor='#83c5be'">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-black focus:outline-none transition ease-in-out duration-150" style="background-color: #83c5be !important; margin-left: 50px;" onmouseout="this.style.backgroundColor='#83c5be'">
                             <div>{{ Auth::user()->name }}</div>
                             <div class="ml-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -66,15 +98,11 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')" class="text-black hover:bg-gray-100">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <x-dropdown-link :href="route('logout')" class="text-black hover:bg-gray-100" onclick="event.preventDefault(); this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Cerrar sesión') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -83,7 +111,7 @@
 
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-black  focus:outline-none focus:bg-blue-700 focus:text-gray-300 transition duration-150 ease-in-out">
+                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-black transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{ 'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -122,12 +150,12 @@
                 <div class="font-medium text-sm text-black-200">{{ Auth::user()->email }}</div>
             </div>
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')" class="text-black">
+                <x-responsive-nav-link :href="route('profile.edit')" class="text-black active-nav-link">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <x-responsive-nav-link :href="route('logout')" class="text-black" onclick="event.preventDefault(); this.closest('form').submit();">
+                    <x-responsive-nav-link :href="route('logout')" class="text-black active-nav-link" onclick="event.preventDefault(); this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
@@ -135,4 +163,3 @@
         </div>
     </div>
 </nav>
-

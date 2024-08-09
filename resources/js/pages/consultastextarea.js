@@ -75,6 +75,11 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
         container.appendChild(newFields); // añade los nuevos campos al contenedor
+
+        // asignar evento para eliminar campos de medicación
+        newFields.querySelector('.removeButton').addEventListener('click', function() {
+            newFields.remove();
+        });
     });
 
     // evento para eliminar campos de medicación
@@ -93,20 +98,22 @@ document.addEventListener('DOMContentLoaded', function() {
         newFields.innerHTML = `
             <div class="flex-1">
                 <label for="servicio">Servicio</label>
-                <select name="servicio[]" class="input-field servicio-select" required>
+                <select name="servicio[]" class="input-field servicio-select">
                     <option value="">Seleccione un servicio</option>
                     ${Array.from(originalSelect.options).map(option => `
-                        <option value="${option.value}" data-precio="${option.getAttribute('data-precio')}">${option.text}</option>
+                        <option value="${option.value}" data-precio="${option.getAttribute('data-precio')}" data-cantidad="${option.getAttribute('data-cantidad')}" ${option.getAttribute('data-cantidad') === "0" ? 'disabled' : ''}>
+                            ${option.text} ${option.getAttribute('data-cantidad') === "0" ? '(No disponible)' : ''}
+                        </option>
                     `).join('')}
                 </select>
             </div>
             <div class="flex-1">
                 <label for="cantidad_servicio">Cantidad</label>
-                <input type="number" name="cantidad_servicio[]"  value="1" class="input-field"/>
+                <input type="number" name="cantidad_servicio[]" value="1" class="input-field"/>
             </div>
             <div class="flex-1">
                 <label for="precio">Precio</label>
-                <input type="number" name="precio[]" required class="input-field" readonly/>
+                <input type="number" name="precio[]" class="input-field" readonly/>
             </div>
             <div class="flex-1 flex items-center">
                 <button type="button" class="removeButton add"><ion-icon name="trash-outline"></ion-icon></button>
@@ -120,7 +127,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const selectedOption = e.target.options[e.target.selectedIndex];
             const precio = selectedOption.getAttribute('data-precio');
             precioInput.value = precio; // asigna el precio correspondiente al servicio seleccionado
-            cantidadInput.value = 1; // asigna la cantidad predeterminada de 1
+        });
+
+        // asignar evento para eliminar campos de servicio
+        newFields.querySelector('.removeButton').addEventListener('click', function() {
+            newFields.remove();
         });
     });
 
@@ -138,33 +149,38 @@ document.addEventListener('DOMContentLoaded', function() {
             const selectedOption = e.target.options[e.target.selectedIndex];
             const precio = selectedOption.getAttribute('data-precio');
             precioInput.value = precio; // asigna el precio correspondiente al servicio seleccionado
-            cantidadInput.value = 1; // asigna la cantidad predeterminada de 1
         });
     });
 
-     // Validación del formulario
-     const form = document.querySelector('form');
-     form.addEventListener('submit', function(event) {
-         const temperatura = document.getElementById('temperatura').value;
-         const talla = document.getElementById('talla').value;
-         const frecuencia_cardiaca = document.getElementById('frecuencia_cardiaca').value;
-         const saturacion_oxigeno = document.getElementById('saturacion_oxigeno').value;
- 
-         if (temperatura > 99 || talla > 99 || frecuencia_cardiaca > 99 || saturacion_oxigeno > 99) {
-             event.preventDefault();
- 
-             Swal.fire({
-                 icon: 'error',
-                 title: 'Valor fuera de rango',
-                 text: 'Los valores de los signos vitales deben ser menores a 99.',
-                 confirmButtonText: 'Aceptar'
-             });
- 
-             if (temperatura > 99) document.getElementById('temperatura').value = '';
-             if (talla > 99) document.getElementById('talla').value = '';
-             if (frecuencia_cardiaca > 99) document.getElementById('frecuencia_cardiaca').value = '';
-             if (saturacion_oxigeno > 99) document.getElementById('saturacion_oxigeno').value = '';
-         }
-     });
+    function updatePrecio(selectElement) {
+        const precioInput = selectElement.closest('.servicios-field-group').querySelector('input[name="precio[]"]');
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const precio = selectedOption.getAttribute('data-precio');
+        precioInput.value = precio;
+    }
 
+    // Validación del formulario
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(event) {
+        const temperatura = document.getElementById('temperatura').value;
+        const talla = document.getElementById('talla').value;
+        const frecuencia_cardiaca = document.getElementById('frecuencia_cardiaca').value;
+        const saturacion_oxigeno = document.getElementById('saturacion_oxigeno').value;
+
+        if (temperatura > 99 || talla > 99 || frecuencia_cardiaca > 99 || saturacion_oxigeno > 99) {
+            event.preventDefault();
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Valor fuera de rango',
+                text: 'Los valores de los signos vitales deben ser menores a 99.',
+                confirmButtonText: 'Aceptar'
+            });
+
+            if (temperatura > 99) document.getElementById('temperatura').value = '';
+            if (talla > 99) document.getElementById('talla').value = '';
+            if (frecuencia_cardiaca > 99) document.getElementById('frecuencia_cardiaca').value = '';
+            if (saturacion_oxigeno > 99) document.getElementById('saturacion_oxigeno').value = '';
+        }
+    });
 });

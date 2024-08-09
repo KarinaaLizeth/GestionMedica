@@ -26,4 +26,12 @@ class HistorialController extends Controller
 
         return view('historial.historial', compact('paciente', 'citas', 'consultas', 'numCitas', 'numConsultas'));
     }
+    public function verConsultasPorPaciente($pacienteId)
+    {
+        $paciente = Pacientes::findOrFail($pacienteId);
+        $consultas = Consultas::where('paciente_id', $paciente->id)->with('doctor')->get();
+
+        return view('pacientes.historial_consultas', compact('consultas', 'paciente'));
+    }
+
 }

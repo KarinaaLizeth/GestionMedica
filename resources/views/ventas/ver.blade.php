@@ -10,7 +10,7 @@
     </div>
 
     <div class="venta-detalles-container">
-        <div class="venta-info">
+        <div class="ventas-info flex justify-between">
             @if($consulta)
                 <div class="info-section">
                     <h4><strong>Doctor</strong></h4>

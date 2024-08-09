@@ -31,9 +31,37 @@
     font-size: 13px;
 }
 
-p{
+.venta-detalles-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.ventas-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.info-section {
+    width: 30%;
+}
+
+.info-section h4 {
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #333;
+}
+
+.info-section p {
+    margin: 2px 0;
+    color: #555;
+    font-size: 12px;
+}
+
+p {
     font-size: 13px;
 }
+
 .informacion-header a ion-icon {
     margin-right: 8px;
 }
@@ -56,11 +84,12 @@ p{
     padding: 10px;
     text-align: left;
     font-size: 13px;
-
 }
-.total{
+
+.total {
     background-color: #DAFFEF;
 }
+
 .tabla th {
     background-color: #DAFFEF;
 }

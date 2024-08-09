@@ -77,8 +77,8 @@
                             <button type="button" class="text-red-600 dark:text-red-500 hover:underline btn-eliminar"><ion-icon name="trash-outline"></ion-icon> Eliminar</button>
                         </form>
                     @endif
-                    <a href="{{ route('consultas.crear.paciente', $paciente->id) }}" class="text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="open-outline"></ion-icon> Consultar</a>
-                    <a href="{{ route('pacientes.historial', $paciente->id) }}" class="text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="file-tray-full-outline"></ion-icon> Ver</a>
+                    <a href="{{ route('consultas.crear.paciente', $paciente->id) }}" class="text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="open-outline"></ion-icon> Consultar</a><br>
+                    <a href="{{ route('pacientes.historial', $paciente->id) }}" class="text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="file-tray-full-outline"></ion-icon> Ver Paciente</a>
 
                 </td>
             </tr>
@@ -159,5 +159,6 @@ document.addEventListener('DOMContentLoaded', function() {
         table.search(this.value).draw();
     });
 });
+
 </script>
 @endsection

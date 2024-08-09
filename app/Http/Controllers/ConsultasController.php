@@ -306,6 +306,13 @@ class ConsultasController extends Controller
         
         return view('consultas.ver', compact('consulta', 'cita'));
     }
+    public function verConsultasPorPaciente($pacienteId)
+    {
+        $paciente = Pacientes::findOrFail($pacienteId);
+        $consultas = Consultas::where('paciente_id', $paciente->id)->with('doctor')->get();
+
+        return view('pacientes.historial_consultas', compact('consultas', 'paciente'));
+    }
     
 
 
