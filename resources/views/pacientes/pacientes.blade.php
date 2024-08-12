@@ -69,7 +69,6 @@
                 <td class="px-6 py-4">{{ $paciente->telefono_emergencia }}</td>
                 <td class="px-6 py-4">{{ \Carbon\Carbon::parse($paciente->fecha_nacimiento)->format('Y-m-d') }}</td>
                 <td class="px-6 py-4">
-                    <a href="{{ route('pacientes.editar', $paciente->id) }}" class="text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="create-outline"></ion-icon> Editar</a>
                     @if(Auth::user()->role->nombre === 'Admin' || Auth::user()->role->nombre === 'Doctor')
                         <form action="{{ route('pacientes.eliminar', $paciente->id) }}" method="POST" class="d-inline-block form-eliminar">
                             @csrf
@@ -77,9 +76,14 @@
                             <button type="button" class="text-red-600 dark:text-red-500 hover:underline btn-eliminar"><ion-icon name="trash-outline"></ion-icon> Eliminar</button>
                         </form>
                     @endif
-                    <a href="{{ route('consultas.crear.paciente', $paciente->id) }}" class="text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="open-outline"></ion-icon> Consultar</a><br>
-                    <a href="{{ route('pacientes.historial', $paciente->id) }}" class="text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="file-tray-full-outline"></ion-icon> Ver Paciente</a>
-
+                    @if(Auth::user()->role->nombre === 'Admin' || Auth::user()->role->nombre === 'Doctor'|| Auth::user()->role->nombre === 'Secretaria')
+                        <a href="{{ route('pacientes.editar', $paciente->id) }}" class="text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="create-outline"></ion-icon> Editar</a>    
+                        <a href="{{ route('consultas.crear.paciente', $paciente->id) }}" class="text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="open-outline"></ion-icon> Consultar</a><br>
+                        <a href="{{ route('pacientes.historial', $paciente->id) }}" class="text-blue-600 dark:text-blue-500 hover:underline"><ion-icon name="file-tray-full-outline"></ion-icon> Ver Paciente</a>
+                    @endif
+                    @if(Auth::user()->role->nombre === 'MedicoColaborador')
+                        <a href="{{ route('consultas.porPaciente', $paciente->id) }}" class="btn btn-primary mt-2">Ver todas las consultas</a>
+                    @endif
                 </td>
             </tr>
             @endforeach

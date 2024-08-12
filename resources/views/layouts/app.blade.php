@@ -40,6 +40,8 @@
             @include('layouts.navigation_secretaria')
         @elseif($userRole === 'admin')
             @include('layouts.navigation')
+        @elseif($userRole === 'medicocolaborador')
+            @include('layouts.navigation_colaborador')
         @else
             @include('layouts.ventana')
         @endif

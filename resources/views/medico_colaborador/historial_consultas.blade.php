@@ -4,7 +4,7 @@
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg bg-white dark:bg-gray-900 p-4">
     <div class="flex items-center justify-between flex-wrap md:flex-nowrap space-y-4 md:space-y-0 mb-4">
         <div class="flex items-center space-x-4">
-            <label for="table-search" class="sr-only">Buscaar</label>
+            <label for="table-search" class="sr-only">Buscar</label>
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 flex items-center ps-3 pointer-events-none">
                     <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -38,10 +38,13 @@
                 <td class="px-6 py-4">{{ $consulta->created_at->format('Y-m-d') }}</td>
                 <td class="px-6 py-4">{{ $consulta->created_at->format('H:i') }}</td>    
                 <td class="px-6 py-4">
-                    <a href="{{ route('consultas.ver', $consulta->id) }}" class="text-green-600 dark:text-green-500 hover:underline">
-                        <ion-icon name="eye-outline" style="margin-left: 2px;"></ion-icon> Ver
-                    </a>
+                    <form action="{{ route('consultas.solicitar') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="consulta_id" value="{{ $consulta->id }}">
+                        <button type="submit" class="btn btn-primary">Solicitar Consulta</button>
+                    </form>
                 </td>
+
             </tr>
             @endforeach
         </tbody>

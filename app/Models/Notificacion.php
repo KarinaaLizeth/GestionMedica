@@ -10,7 +10,14 @@ class Notificacion extends Model
     use HasFactory;
 
     protected $table = 'notificaciones'; 
-    protected $fillable = ['type', 'user_id', 'related_id', 'message', 'read'];
+    protected $fillable = [
+        'tipo',
+        'user_id',
+        'solicitante_id',
+        'solicitante_type', // No olvides incluir este campo
+        'mensaje',
+        'leido',
+        ];
 
     // Relación con los usuarios
     public function user()
@@ -23,4 +30,10 @@ class Notificacion extends Model
     {
         return $this->morphTo();
     }
+    public function solicitante()
+    {
+        return $this->morphTo();
+    }
+
+
 }

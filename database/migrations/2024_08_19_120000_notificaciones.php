@@ -13,13 +13,12 @@ return new class extends Migration
             $table->id();
             $table->string('tipo');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('solicitante_id');
+            $table->morphs('solicitante'); // Esto crea solicitante_id y solicitante_type
             $table->string('mensaje');
             $table->boolean('leido')->default(false);
             $table->timestamps();
             
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('solicitante_id')->references('id')->on('pacientes')->onDelete('cascade');
         });
         
     }

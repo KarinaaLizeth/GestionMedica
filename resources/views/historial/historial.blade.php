@@ -124,7 +124,7 @@
                                             <td>{{ $consulta->motivo_consulta }}</td>
                                             <td>{{ $consulta->notas_padecimiento }}</td>
                                             <td>
-                                                <a href="{{ route('consultas.ver', $consulta->id) }}" class="btn btn-info btn-sm">Ver</a>
+                                                <a href="{{ route('consultas.ver', $consulta->id) }}" class="text-green-600 dark:text-green-500 hover:underline"><ion-icon name="eye-outline" style="margin-left: 2px;"></ion-icon>Ver</a>
                                             </td>
                                         </tr>
                                     @endforeach

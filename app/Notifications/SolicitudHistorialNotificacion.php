@@ -8,6 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\SolicitudHistorial;
 
+
 class SolicitudHistorialNotificacion extends Notification
 {
     use Queueable;

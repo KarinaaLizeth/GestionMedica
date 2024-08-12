@@ -20,6 +20,8 @@ use App\Models\Doctores;
 use App\Models\Pacientes;
 use App\Models\Venta;
 use App\Models\VentasServicios;
+use App\Notifications\SolicitudConsultaNotificacion; 
+use Illuminate\Support\Facades\Notification;
 
 class ConsultasController extends Controller
 {
@@ -298,6 +300,7 @@ class ConsultasController extends Controller
 
         return response()->json(['success' => 'Servicio eliminado correctamente']);
     }
+    
     //ver consultas
     public function ver($id)
     {
@@ -306,14 +309,15 @@ class ConsultasController extends Controller
         
         return view('consultas.ver', compact('consulta', 'cita'));
     }
+
     public function verConsultasPorPaciente($pacienteId)
     {
         $paciente = Pacientes::findOrFail($pacienteId);
         $consultas = Consultas::where('paciente_id', $paciente->id)->with('doctor')->get();
 
-        return view('pacientes.historial_consultas', compact('consultas', 'paciente'));
+
+        return view('medico_colaborador.historial_consultas', compact('consultas', 'paciente'));
     }
-    
 
 
 

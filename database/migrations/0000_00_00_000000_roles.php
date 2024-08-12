@@ -16,7 +16,7 @@ return new class extends Migration
         });
 
         // Insertar roles solo si no existen
-        $roles = ['Doctor', 'Secretaria', 'Admin'];
+        $roles = ['Doctor', 'Secretaria', 'Admin', 'MedicoColaborador'];
         foreach ($roles as $role) {
             DB::table('roles')->updateOrInsert(
                 ['nombre' => $role],

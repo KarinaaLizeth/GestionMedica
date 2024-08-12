@@ -98,18 +98,16 @@
 <section class="relative pt-12 bg-blueGray-50">
 <div class="items-center flex flex-wrap">
   <div class="w-full md:w-4/12 ml-auto mr-auto px-4">
-    <img alt="..." class="max-w-full rounded-lg shadow-lg" src="https://images.unsplash.com/photo-1555212697-194d092e3b8f?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=634&amp;q=80">
+    <img src="{{ asset('images/welcome.jpg') }}" alt="Health Expert">
   </div>
   <div class="w-full md:w-5/12 ml-auto mr-auto px-4">
     <div class="md:pr-12">
       <div class="text-pink-600 p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-lg rounded-full bg-pink-300 mt-8">
         <i class="fas fa-rocket text-xl"></i>
       </div>
-      <h3 class="text-3xl font-semibold">A growing company</h3>
+      <h3 class="text-3xl font-semibold">Hola</h3>
       <p class="mt-4 text-lg leading-relaxed text-blueGray-500">
-        The extension comes with three pre-built pages to help you get
-        started faster. You can change the text and images and you're
-        good to go.
+            Bienvenido a HealthPlus, la solución integral para gestionar todos los aspectos de tu práctica médica. Con nuestra plataforma, puedes acceder a herramientas diseñadas para facilitar la administración de expedientes médicos, mejorar la comunicación entre profesionales de la salud y ofrecer una mejor experiencia a tus pacientes.
       </p>
       <ul class="list-none mt-6">
         <li class="py-2">
@@ -119,7 +117,7 @@
             </div>
             <div>
               <h4 class="text-blueGray-500">
-                Carefully crafted components
+              Gestión de Expedientes Médicos
               </h4>
             </div>
           </div>
@@ -130,7 +128,7 @@
               <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3"><i class="fab fa-html5"></i></span>
             </div>
             <div>
-              <h4 class="text-blueGray-500">Amazing page examples</h4>
+              <h4 class="text-blueGray-500">Panel de Control Dinámico</h4>
             </div>
           </div>
         </li>
@@ -140,7 +138,7 @@
               <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3"><i class="far fa-paper-plane"></i></span>
             </div>
             <div>
-              <h4 class="text-blueGray-500">Dynamic components</h4>
+              <h4 class="text-blueGray-500">Interfaz Intuitiva</h4>
             </div>
           </div>
         </li>
@@ -148,17 +146,7 @@
     </div>
   </div>
 </div>
-<footer class="relative  pt-8 pb-6 mt-8">
-  <div class="container mx-auto px-4">
-    <div class="flex flex-wrap items-center md:justify-between justify-center">
-      <div class="w-full md:w-6/12 px-4 mx-auto text-center">
-        <div class="text-sm text-blueGray-500 font-semibold py-1">
-          Made with <a href="https://www.creative-tim.com/product/notus-js" class="text-blueGray-500 hover:text-gray-800" target="_blank">Notus JS</a> by <a href="https://www.creative-tim.com" class="text-blueGray-500 hover:text-blueGray-800" target="_blank"> Creative Tim</a>.
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>
+
 </section>
 
 <!-- component -->
@@ -167,7 +155,7 @@
         <!-- section header -->
         <header class="text-center mx-auto mb-12">
             <h2 class="text-2xl leading-normal mb-2 font-bold text-gray-800 dark:text-gray-100">
-                <span class="font-light">Our</span> Team
+                <span class="font-light">Nuestro</span> Equipo
             </h2>
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 60" style="margin: 0 auto;height: 35px;" xml:space="preserve">
                 <circle cx="50.1" cy="30.4" r="5" class="stroke-primary" style="fill: transparent;stroke-width: 2;stroke-miterlimit: 10;"></circle>
@@ -183,10 +171,10 @@
                 <div class="relative overflow-hidden bg-white dark:bg-gray-800 mb-12 hover-grayscale-0 wow fadeInUp" data-wow-duration="1s" style="visibility: visible; animation-duration: 1s; animation-name: fadeInUp;">
                     <!-- team block -->
                     <div class="relative overflow-hidden px-6">
-                        <img src="https://tailone.tailwindtemplate.net/src/img/dummy/avatar1.png" class="max-w-full h-auto mx-auto rounded-full bg-gray-50 grayscale" alt="title image">
+                        <img src="{{ asset('images/carlos.jpg') }}" alt="Health Expert" style="border-radius: 60%; width: 200px; height: 200px; object-fit: cover; margin:auto;">
                     </div>
                     <div class="pt-6 text-center">
-                        <p class="text-lg leading-normal font-bold mb-1">Joe Antonio</p>
+                        <p class="text-lg leading-normal font-bold mb-1">Carlos Bocanegra</p>
                         <p class="text-gray-500 leading-relaxed font-light">Founder CEO</p>
                         <!-- social icon -->
                         <div class="mt-2 mb-5 space-x-2">
@@ -225,10 +213,10 @@
                 <!-- team block -->
                 <div class="relative overflow-hidden bg-white dark:bg-gray-800 mb-12 hover-grayscale-0 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".1s" style="visibility: visible; animation-duration: 1s; animation-delay: 0.1s; animation-name: fadeInUp;">
                     <div class="relative overflow-hidden px-6">
-                        <img src="https://tailone.tailwindtemplate.net/src/img/dummy/avatar3.png" class="max-w-full h-auto mx-auto rounded-full bg-gray-50 grayscale" alt="title image">
+                        <img src="{{ asset('images/karina.jpeg') }}" alt="Health Expert" style="border-radius: 60%; width: 200px; height: 200px; object-fit: cover; margin:auto;">
                     </div>
                     <div class="pt-6 text-center">
-                        <p class="text-lg leading-normal font-bold mb-1">Sarah Daeva</p>
+                        <p class="text-lg leading-normal font-bold mb-1">Karina Arévalo</p>
                         <p class="text-gray-500 leading-relaxed font-light">Marketing</p>
                         <!-- social icon -->
                         <div class="mt-2 mb-5 space-x-2">
@@ -267,10 +255,10 @@
                 <!-- team block -->
                 <div class="relative overflow-hidden bg-white dark:bg-gray-800 mb-12 hover-grayscale-0 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s" style="visibility: visible; animation-duration: 1s; animation-delay: 0.3s; animation-name: fadeInUp;">
                     <div class="relative overflow-hidden px-6">
-                        <img src="https://tailone.tailwindtemplate.net/src/img/dummy/avatar2.png" class="max-w-full h-auto mx-auto rounded-full bg-gray-50 grayscale" alt="title image">
+                        <img src="{{ asset('images/dafne.jpg') }}" alt="Health Expert" style="border-radius: 60%; width: 200px; height: 200px; object-fit: cover; margin:auto;">
                     </div>
                     <div class="pt-6 text-center">
-                        <p class="text-lg leading-normal font-bold mb-1">Daniel Emo</p>
+                        <p class="text-lg leading-normal font-bold mb-1">Dafne Flores</p>
                         <p class="text-gray-500 leading-relaxed font-light">Sales manager</p>
                         <!-- social icon -->
                         <div class="mt-2 mb-5 space-x-2">
@@ -309,10 +297,10 @@
                 <!-- team block -->
                 <div class="relative overflow-hidden bg-white dark:bg-gray-800 mb-12 hover-grayscale-0 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".5s" style="visibility: visible; animation-duration: 1s; animation-delay: 0.5s; animation-name: fadeInUp;">
                     <div class="relative overflow-hidden px-6">
-                        <img src="https://tailone.tailwindtemplate.net/src/img/dummy/avatar4.png" class="max-w-full h-auto mx-auto rounded-full bg-gray-50 grayscale" alt="title image">
+                        <img src="{{ asset('images/heriberto.jpg') }}" alt="Health Expert" style="border-radius: 60%; width: 200px; height: 200px; object-fit: cover; margin:auto;">
                     </div>
                     <div class="pt-6 text-center">
-                        <p class="text-lg leading-normal font-bold mb-1">Toni Lana</p>
+                        <p class="text-lg leading-normal font-bold mb-1">Heriberto Nava</p>
                         <p class="text-gray-500 leading-relaxed font-light">UI/UX Designer</p>
                         <!-- social icon -->
                         <div class="mt-2 mb-5 space-x-2">

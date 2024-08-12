@@ -50,6 +50,7 @@ class SolicitudHistorialController extends Controller
                 'tipo' => 'solicitud_historial',
                 'user_id' => $doctor->id,
                 'solicitante_id' => $paciente->id,
+                'solicitante_type' => Pacientes::class, 
                 'mensaje' => "{$nombreCompleto} ha solicitado su historia de consultas",
                 'created_at' => now(),
                 'updated_at' => now(),

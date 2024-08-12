@@ -13,6 +13,9 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\VentasController;
 use App\Http\Controllers\HistorialController;
 use App\Http\Controllers\SolicitudHistorialController;
+use App\Http\Controllers\MedicoColaboradorController;
+use App\Http\Controllers\SolicitudConsultaController;
+use App\Http\Controllers\NotificacionesController;
 use App\Http\Middleware\Roles;
 
 
@@ -30,14 +33,15 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/historial/{pacienteId}', [SolicitudHistorialController::class, 'verHistorial'])->name('historial.ver');
-Route::post('/notificaciones/leer', [NotificacionesController::class, 'marcarComoLeidas'])->name('notificaciones.leer');
 
 
-Route::get('/solicitudes', [SolicitudHistorialController::class, 'index'])->name('solicitudes.index');
 Route::post('/solicitar-historial', [SolicitudHistorialController::class, 'store']);
-Route::get('/admin/solicitudes', [SolicitudHistorialController::class, 'index'])->name('notificaciones');
+Route::post('/notificaciones/leer/{id}', [NotificacionesController::class, 'marcarComoLeidas'])->name('notificaciones.leer');
 Route::post('/admin/solicitudes/aprobar/{id}', [SolicitudHistorialController::class, 'aprobar']);
 Route::post('/admin/solicitudes/denegar/{id}', [SolicitudHistorialController::class, 'denegar']);
+
+Route::get('/admin/solicitudes', [SolicitudHistorialController::class, 'index'])->name('admin.solicitudes');
+Route::get('/admin/solicitudes_consultas', [SolicitudConsultaController::class, 'verSolicitudes'])->name('admin.solicitudes_consultas');
 
 
 Route::middleware([Roles::class . ':doctor'])->group(function () {
@@ -115,11 +119,16 @@ Route::middleware([Roles::class . ':doctor'])->group(function () {
     Route::get('/pacientes/{paciente}/historial', [HistorialController::class, 'mostrarHistorial'])->name('pacientes.historial');
     Route::get('/pacientes/{pacienteId}/consultas', [ConsultasController::class, 'verConsultasPorPaciente'])->name('consultas.porPaciente');
 
-    //rutas solicitudes
+    //rutas para colaboradores
+    Route::get('/medico_colaboradores', [MedicoColaboradorController::class, 'index'])->name('colaboradores.index');
+    Route::get('/medico_colaboradores/crear', [MedicoColaboradorController::class, 'crear'])->name('colaboradores.crear');
+    Route::post('/medico_colaboradores', [MedicoColaboradorController::class, 'store'])->name('colaboradores.store');
 
-    //rutas notificaciones
-    Route::post('/notificaciones/leer', [NotificacionesController::class, 'marcarComoLeidas'])->name('notificaciones.leer');
-
+    //rutas solicitud consultas
+    Route::post('/consultas/solicitar', [SolicitudConsultaController::class, 'solicitar'])->name('consultas.solicitar');
+    Route::get('/consultas/aprobaciones', [SolicitudConsultaController::class, 'verSolicitudes'])->name('consultas.aprobaciones');
+    Route::post('/consultas/{solicitud}/aprobar', [SolicitudConsultaController::class, 'aprobar'])->name('consultas.aprobar');
+    Route::post('/consultas/{solicitud}/rechazar', [SolicitudConsultaController::class, 'rechazar'])->name('consultas.rechazar');
 
     Route::get('/logout', function () {
         return view('welcome');
@@ -198,6 +207,12 @@ Route::middleware([Roles::class . ':secretaria'])->group(function () {
     //rutas para historial
     Route::get('/pacientes/{paciente}/historial', [HistorialController::class, 'mostrarHistorial'])->name('pacientes.historial');
     Route::get('/pacientes/{pacienteId}/consultas', [ConsultasController::class, 'verConsultasPorPaciente'])->name('consultas.porPaciente');
+
+    //rutas solicitud consultas
+    Route::post('/consultas/solicitar', [SolicitudConsultaController::class, 'solicitar'])->name('consultas.solicitar');
+    Route::get('/consultas/aprobaciones', [SolicitudConsultaController::class, 'verSolicitudes'])->name('consultas.aprobaciones');
+    Route::post('/consultas/{solicitud}/aprobar', [SolicitudConsultaController::class, 'aprobar'])->name('consultas.aprobar');
+    Route::post('/consultas/{solicitud}/rechazar', [SolicitudConsultaController::class, 'rechazar'])->name('consultas.rechazar');
 
     Route::get('/logout', function () {
         return view('welcome');
@@ -294,6 +309,74 @@ Route::middleware([Roles::class . ':admin'])->group(function () {
     //rutas para historial
     Route::get('/pacientes/{paciente}/historial', [HistorialController::class, 'mostrarHistorial'])->name('pacientes.historial');
     Route::get('/pacientes/{pacienteId}/consultas', [ConsultasController::class, 'verConsultasPorPaciente'])->name('consultas.porPaciente');
+
+    //rutas solicitud consultas
+    Route::post('/consultas/solicitar', [SolicitudConsultaController::class, 'solicitar'])->name('consultas.solicitar');
+    Route::get('/consultas/aprobaciones', [SolicitudConsultaController::class, 'verSolicitudes'])->name('consultas.aprobaciones');
+    Route::post('/consultas/{solicitud}/aprobar', [SolicitudConsultaController::class, 'aprobar'])->name('consultas.aprobar');
+    Route::post('/consultas/{solicitud}/rechazar', [SolicitudConsultaController::class, 'rechazar'])->name('consultas.rechazar');
+
+    Route::get('/logout', function () {
+        return view('welcome');
+    })->name('logout');
+});
+
+Route::middleware([Roles::class . ':medicocolaborador'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+    // Rutas para Pacientes
+    Route::get('/pacientes', [PacientesController::class, 'index'])->name('pacientes.index');
+    Route::get('/pacientes/crear', [PacientesController::class, 'crear'])->name('pacientes.crear');
+    Route::post('/pacientes', [PacientesController::class, 'store'])->name('pacientes.store');
+    Route::get('/pacientes/{paciente}/editar', [PacientesController::class, 'editar'])->name('pacientes.editar');
+    Route::put('/pacientes/{paciente}', [PacientesController::class, 'actualizar'])->name('pacientes.actualizar');
+    Route::delete('/pacientes/{paciente}', [PacientesController::class, 'eliminar'])->name('pacientes.eliminar');
+
+    //rutas para citas
+    Route::get('/citas', [CitasController::class, 'index'])->name('citas.index');
+    Route::get('/citas/crear', [CitasController::class, 'crear'])->name('citas.crear');
+    Route::post('/citas', [CitasController::class, 'store'])->name('citas.store');
+    Route::get('/citas/{id}/editar', [CitasController::class, 'editar'])->name('citas.editar');
+    Route::put('/citas/{id}', [CitasController::class, 'actualizar'])->name('citas.actualizar');
+    Route::delete('/citas/{id}', [CitasController::class, 'eliminar'])->name('citas.eliminar');
+    Route::get('/citas/lista', [CitasController::class, 'lista'])->name('citas.lista');
+    Route::get('/citas/{id}/cambiar-estado/{estado}', [CitasController::class, 'cambiarEstado'])->name('citas.cambiarEstado');
+    Route::get('/horarios-disponibles', [CitasController::class, 'getHorariosDisponibles']);
+    Route::get('/citas-eventos', [CitasController::class, 'getCitasEventos']);
+    Route::get('/citas-dia', [CitasController::class, 'getCitasPorDia']);
+    Route::get('/citas/cambiarEstado/{id}/{estado}', [CitasController::class, 'cambiarEstado'])->name('citas.cambiarEstado');
+    Route::post('/citas/{id}/actualizar-fecha', [CitasController::class, 'actualizarFecha']);
+
+
+    //rutas consultas
+    Route::get('/consultas', [ConsultasController::class, 'index'])->name('consultas.index');
+    Route::get('/consultas/crear', [ConsultasController::class, 'crear'])->name('consultas.crear');
+    Route::post('/consultas', [ConsultasController::class, 'store'])->name('consultas.store');
+    Route::get('/consultas/{id}/editar', [ConsultasController::class, 'editar'])->name('consultas.editar');
+    Route::put('/consultas/{id}', [ConsultasController::class, 'update'])->name('consultas.update');
+    Route::get('/consultas/crear/{paciente}', [ConsultasController::class, 'crearDesdePaciente'])->name('consultas.crear.paciente');
+    Route::get('/lista-consultas', [ConsultasController::class, 'listaConsultas'])->name('consultas.lista');
+    Route::delete('/consultas/servicios/{id}', [ConsultasController::class, 'eliminarServicio'])->name('consultas.servicios.eliminar');
+    Route::get('/consultas/{id}', [ConsultasController::class, 'ver'])->name('consultas.ver');
+    Route::post('/consultas/{id}/completar', [ConsultasController::class, 'completar'])->name('consultas.completar');
+
+    //rutas para historial
+    Route::get('/pacientes/{paciente}/historial', [HistorialController::class, 'mostrarHistorial'])->name('pacientes.historial');
+    Route::get('/pacientes/{pacienteId}/consultas', [ConsultasController::class, 'verConsultasPorPaciente'])->name('consultas.porPaciente');
+
+    //rutas para colaboradores
+    Route::get('/medico_colaboradores', [MedicoColaboradorController::class, 'index'])->name('colaboradores.index');
+    Route::post('/medico_colaboradores', [MedicoColaboradorController::class, 'store'])->name('colaboradores.store');
+    Route::get('/consultas/{id}', [ConsultasController::class, 'ver'])->name('consultas.ver');
+    
+    //rutas solicitud consultas
+    Route::post('/consultas/solicitar', [SolicitudConsultaController::class, 'solicitar'])->name('consultas.solicitar');
+    Route::get('/consultas/aprobaciones', [SolicitudConsultaController::class, 'verSolicitudes'])->name('consultas.aprobaciones');
+    Route::post('/consultas/{solicitud}/aprobar', [SolicitudConsultaController::class, 'aprobar'])->name('consultas.aprobar');
+    Route::post('/consultas/{solicitud}/rechazar', [SolicitudConsultaController::class, 'rechazar'])->name('consultas.rechazar');
 
     Route::get('/logout', function () {
         return view('welcome');
