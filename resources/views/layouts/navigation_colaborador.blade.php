@@ -21,9 +21,62 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('pacientes.index')" :active="request()->routeIs('pacientes.index')" class="text-black active-nav-link">
-                        {{ __('Pacientes') }}
+                    <x-nav-link :href="route('consultas.compartidas')" :active="request()->routeIs('consultas.compartidas')" class="text-black active-nav-link">
+                        {{ __('Consultas recibidas') }}
                     </x-nav-link>
+
+
+                    <!-- Notificaciones de Consultas Compartidas -->
+                    @php
+                        $userId = auth()->id();
+                        $colaborador = App\Models\MedicoColaborador::where('correo', auth()->user()->email)->first();
+
+                        $notificaciones = App\Models\Notificacion::where(function ($query) use ($userId, $colaborador) {
+                            $query->where('user_id', $userId)
+                                ->orWhere(function($q) use ($colaborador) {
+                                    if ($colaborador) {
+                                        $q->where('user_id', $colaborador->id);
+                                    }
+                                });
+                        })
+                        ->where('leido', false)
+                        ->where('tipo', 'consulta_compartida')
+                        ->get();
+                    @endphp
+
+
+                    <div class="relative flex items-center ml-8" x-data="{ open: false }" @click.away="open = false">
+                        <x-nav-link @click="open = !open" class="text-black active-nav-link relative cursor-pointer">
+                            <ion-icon name="notifications-outline" style="font-size: 24px;"></ion-icon>
+                            @if($notificaciones->count() > 0)
+                                <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none rounded-full" style="background-color: #cf5a5a; color: white;">
+                                    {{ $notificaciones->count() }}
+                                </span>
+                            @endif
+                        </x-nav-link>
+
+                        <!-- Desplegable de notificaciones -->
+                        <div x-show="open" class="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg overflow-auto max-h-64 z-50">
+                            <ul class="divide-y divide-gray-200">
+                                @forelse($notificaciones as $notificacion)
+                                    <li class="p-2 hover:bg-gray-100">
+                                        @if($notificacion->consulta_id)
+                                            <a href="{{ route('consultas.ver', $notificacion->consulta_id) }}" class="text-sm text-gray-700 hover:no-underline">
+                                                {{ $notificacion->mensaje }}
+                                            </a>
+                                        @else
+                                            <span class="text-sm text-gray-700">{{ $notificacion->mensaje }}</span>
+                                        @endif
+                                    </li>
+                                @empty
+                                    <li class="p-2 text-sm text-gray-500">No hay nuevas notificaciones</li>
+                                @endforelse
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">

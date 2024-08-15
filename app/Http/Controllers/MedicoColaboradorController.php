@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\MedicoColaborador;
 use App\Models\User;
+use App\Models\Consultas;
 use App\Models\Role;
+use App\Models\ConsultasCompartidas;
 use Illuminate\Support\Facades\Hash;
 
 class MedicoColaboradorController extends Controller
@@ -55,4 +57,8 @@ class MedicoColaboradorController extends Controller
 
         return redirect()->route('colaboradores.index')->with('success', 'Médico colaborador registrado exitosamente');
     }
+
+
+    
+    
 }

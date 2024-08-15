@@ -43,6 +43,14 @@ Route::post('/admin/solicitudes/denegar/{id}', [SolicitudHistorialController::cl
 Route::get('/admin/solicitudes', [SolicitudHistorialController::class, 'index'])->name('admin.solicitudes');
 Route::get('/admin/solicitudes_consultas', [SolicitudConsultaController::class, 'verSolicitudes'])->name('admin.solicitudes_consultas');
 
+//compartir consultas
+//Route::get('/consultas/{id}/compartir', [ConsultasController::class, 'compartirColaboradores'])->name('consultas.compartir');
+Route::post('/consultas/{id}/compartir', [ConsultasController::class, 'compartirConsulta'])->name('consultas.compartirConsulta');
+Route::get('/consultas-compartidas', [ConsultasController::class, 'consultasRecibidas'])->name('consultas.compartidas');
+Route::get('/consultas/{id}/compartir', [ConsultasController::class, 'mostrarFormularioCompartir'])->name('consultas.mostrarFormularioCompartir');
+Route::post('/consultas/{id}/devolver', [ConsultasController::class, 'devolverConsulta'])->name('consultas.devolver');
+
+//Route::post('/consultas/{id}/compartir', [ConsultasController::class, 'compartir'])->name('consultas.enviarCompartir');
 
 Route::middleware([Roles::class . ':doctor'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -9,8 +9,14 @@
         <div class="informacion-header">
             <h3>Detalles de la Consulta</h3>
             <div class="right-links">
+            @if (auth()->user()->role->nombre === 'Doctor')
                 <a href="{{ route('consultas.index') }}"><ion-icon name="arrow-back-outline" class="mr-2"></ion-icon>Lista de Consultas</a>
+            @endif
+            @if (auth()->user()->role->nombre === 'MedicoColaborador')
+                <a href="{{ route('consultas.compartidas') }}"><ion-icon name="arrow-back-outline" class="mr-2"></ion-icon>Lista de Consultas</a>
+            @endif
                 <a><button id="download-pdf" class="btn"><ion-icon name="download-outline"></ion-icon> Descargar PDF</button></a>
+                <a href="{{ route('consultas.mostrarFormularioCompartir', $consulta->id) }}" class="btn"><ion-icon name="share-outline"></ion-icon> Compartir</a>
             </div>
         </div>
         <div class="formulario-agregar">
@@ -19,7 +25,8 @@
                     <h4><strong>Doctor</strong></h4>
                     <p>{{ $consulta->doctor->nombres }} {{ $consulta->doctor->apellidos }}</p>
                     <p><ion-icon name="call-outline"></ion-icon>{{ $consulta->doctor->telefono }}</p>
-                    <p><ion-icon name="mail-outline"></ion-icon>{{ $consulta->doctor->correo }}</p>
+                    <a href="{{ route('consultas.mostrarFormularioCompartir', $consulta->id) }}" class="btn"><ion-icon name="share-outline"></ion-icon> Compartir
+                </a>
                 </div>
                 <div class="info-section">
                     <h4><strong>Paciente</strong></h4>
@@ -188,6 +195,28 @@
                     </diiv>
                 </div>
             </div>
+            <div class="comentarios-container">
+                <h3 class="comentarios-header">Comentarios del Colaborador</h3>
+                @if (auth()->user()->role->nombre === 'MedicoColaborador')
+                    <form action="{{ route('consultas.devolver', $consulta->id) }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <textarea name="comentarios" class="form-control comentarios-textarea" rows="4" placeholder="Escribe tus comentarios aquí..."></textarea>
+                        </div>
+                        <button type="submit" class="btn devolver-btn">
+                            <ion-icon name="return-down-back-outline"></ion-icon>Devolver
+                        </button>
+                    </form>
+                @else
+                    @if ($consultaCompartida && $consultaCompartida->comentarios)
+                        <p>{{ $consultaCompartida->comentarios }}</p>
+                    @else
+                        <p>No hay comentarios.</p>
+                    @endif
+                @endif
+            </div>
+
+        </div>
         </div>
     </div>
 </div>

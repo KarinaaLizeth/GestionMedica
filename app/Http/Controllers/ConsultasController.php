@@ -20,6 +20,10 @@ use App\Models\Doctores;
 use App\Models\Pacientes;
 use App\Models\Venta;
 use App\Models\VentasServicios;
+use App\Models\MedicoColaborador;
+use App\Models\Notificacion;
+use App\Models\User;
+use App\Models\ConsultasCompartidas;
 use App\Notifications\SolicitudConsultaNotificacion; 
 use Illuminate\Support\Facades\Notification;
 
@@ -306,21 +310,130 @@ class ConsultasController extends Controller
     {
         $consulta = Consultas::with(['paciente', 'doctor', 'signosVitales', 'recetas', 'serviciosConsulta', 'venta.servicios'])->findOrFail($id);
         $cita = Citas::find($consulta->cita_id);
-        
-        return view('consultas.ver', compact('consulta', 'cita'));
+    
+        // Obtener los comentarios si la consulta fue compartida
+        $consultaCompartida = \DB::table('consultas_compartidas')
+            ->where('consulta_id', $consulta->id)
+            ->where('medico_principal_id', auth()->id())
+            ->first();
+    
+        return view('consultas.ver', compact('consulta', 'cita', 'consultaCompartida'));
     }
+    
+    
 
     public function verConsultasPorPaciente($pacienteId)
     {
         $paciente = Pacientes::findOrFail($pacienteId);
         $consultas = Consultas::where('paciente_id', $paciente->id)->with('doctor')->get();
 
-
         return view('medico_colaborador.historial_consultas', compact('consultas', 'paciente'));
     }
 
+    public function mostrarFormularioCompartir($id)
+    {
+        $consulta = Consultas::findOrFail($id);
+        $medicoColaboradores = MedicoColaborador::all();  // Obtener todos los colaboradores
+    
+        return view('consultas.compartir', compact('consulta', 'medicoColaboradores'));
+    }
+    public function consultasRecibidas()
+    {
+        $colaborador = MedicoColaborador::where('correo', auth()->user()->email)->first();
+    
+        if (!$colaborador) {
+            return redirect()->route('dashboard')->with('error', 'Colaborador no encontrado.');
+        }
+    
+        // Obtener las consultas compartidas correspondientes al colaborador autenticado
+        $consultas = \DB::table('consultas_compartidas')
+            ->join('consultas', 'consultas.id', '=', 'consultas_compartidas.consulta_id')
+            ->join('pacientes', 'pacientes.id', '=', 'consultas.paciente_id')
+            ->join('users as doctores', 'doctores.id', '=', 'consultas.doctor_id')
+            ->where('consultas_compartidas.medico_colaborador_id', $colaborador->id)
+            ->select('consultas.*', 'pacientes.nombres as paciente_nombres', 'pacientes.apellidos as paciente_apellidos', 'doctores.name as doctor_nombres')
+            ->get();
+    
+        return view('medico_colaborador.consultas_recibidas', compact('consultas'));
+    }
+    
+    // Función para compartir la consulta
+    public function compartirConsulta(Request $request, $id)
+    {
+        $consulta = Consultas::findOrFail($id);
+        $medicoColaborador = MedicoColaborador::findOrFail($request->input('medico_colaborador_id'));
+    
+        // Obtener el user_id correspondiente al colaborador desde la tabla users
+        $user = User::where('email', $medicoColaborador->correo)->first();
+    
+        if ($user) {
+            Notificacion::create([
+                'consulta_id' => $consulta->id,
+                'user_id' => $user->id, // Usar el user_id del registro en la tabla users
+                'tipo' => 'consulta_compartida',
+                'mensaje' => 'Se te ha compartido una nueva consulta.',
+                'leido' => false,
+            ]);
 
+            \DB::table('consultas_compartidas')->insert([
+                'consulta_id' => $consulta->id,
+                'medico_colaborador_id' => $medicoColaborador->id,
+                'medico_principal_id' => auth()->id(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+    
+            return redirect()->route('consultas.index')->with('success', 'Consulta compartida exitosamente.');
+        } else {
+            return redirect()->route('consultas.index')->with('error', 'Error al encontrar el usuario del colaborador.');
+        }
+    }
 
+    public function devolverConsulta(Request $request, $id)
+    {
+        // Obtener el correo del usuario autenticado
+        $userEmail = auth()->user()->email;
+    
+        // Buscar el colaborador en la tabla medico_colaboradores por correo
+        $colaborador = \DB::table('medico_colaboradores')
+                          ->where('correo', $userEmail)
+                          ->first();
+    
+        // Verificar si se encontró el colaborador
+        if (!$colaborador) {
+            return redirect()->route('consultas.compartidas')->with('error', 'No se encontró el colaborador.');
+        }
+    
+        // Obtener la consulta compartida con el ID del colaborador encontrado
+        $consultaCompartida = \DB::table('consultas_compartidas')
+                                 ->where('consulta_id', $id)
+                                 ->where('medico_colaborador_id', $colaborador->id)
+                                 ->first();
+    
+        // Verificar si se encontró la consulta compartida
+        if ($consultaCompartida) {
+            \DB::table('consultas_compartidas')
+                ->where('id', $consultaCompartida->id)
+                ->update([
+                    'comentarios' => $request->input('comentarios'),
+                    'updated_at' => now(),
+                ]);
+    
+            Notificacion::create([
+                'consulta_id' => $consultaCompartida->consulta_id,
+                'user_id' => $consultaCompartida->medico_principal_id,
+                'tipo' => 'consulta_devuelta',
+                'mensaje' => 'El colaborador ha devuelto la consulta con comentarios.',
+                'leido' => false,
+            ]);
+    
+            // Agregar SweetAlert de éxito
+            return redirect()->route('consultas.compartidas')->with('success', 'Consulta devuelta exitosamente.')
+                    ->with('alert', 'consulta_devuelta');
+        } else {
+            return redirect()->route('consultas.compartidas')->with('error', 'No se encontró la consulta compartida.');
+        }
+    }  
     
 }
     

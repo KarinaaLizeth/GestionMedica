@@ -11,10 +11,11 @@ class Notificacion extends Model
 
     protected $table = 'notificaciones'; 
     protected $fillable = [
+        'consulta_id',
         'tipo',
         'user_id',
         'solicitante_id',
-        'solicitante_type', // No olvides incluir este campo
+        'solicitante_type',
         'mensaje',
         'leido',
         ];
@@ -35,5 +36,9 @@ class Notificacion extends Model
         return $this->morphTo();
     }
 
+    public function consulta()
+    {
+        return $this->belongsTo(Consultas::class, 'consulta_id');
+    }
 
 }

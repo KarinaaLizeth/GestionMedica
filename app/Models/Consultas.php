@@ -56,5 +56,12 @@ class Consultas extends Model
     {
         return $this->belongsTo(Citas::class, 'cita_id'); 
     }
-    
+    public function notificaciones()
+    {
+        return $this->hasMany(Notificacion::class, 'consulta_id');
+    }
+    public function consultasCompartidas()
+    {
+        return $this->hasMany(ConsultaCompartida::class, 'consulta_id');
+    }
 }

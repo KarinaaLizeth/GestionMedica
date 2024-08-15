@@ -53,8 +53,12 @@
                         {{ __('Colaborador') }}
                     </x-nav-link>
                     @php
-                        $notificaciones = App\Models\Notificacion::where('user_id', auth()->id())->where('leido', false)->get();
+                        $notificaciones = App\Models\Notificacion::where('user_id', auth()->id())
+                                        ->where('leido', false)
+                                        ->where('tipo', '!=', 'consulta_compartida')
+                                        ->get();
                     @endphp
+
 
                     <!-- Icono de la campana con contador de notificaciones -->
                     <div class="relative flex items-center ml-8" x-data="{ open: false }" @click.away="open = false" @open-dropdown.window="markNotificationsAsRead">
